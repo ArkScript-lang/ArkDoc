@@ -2,6 +2,7 @@
 
 
 Bold = "**"
+Italic = '_'
 Tab = 9.chr
 NewLine = 10.chr
 OPar = '('
@@ -9,10 +10,11 @@ CPar = ')'
 OBracket = '['
 CBracket = ']'
 Each = '-'
-Underscore = '_'
+Coma = ','
+Space = ' '
 
 FuncBrief = {:ark_doc => '\\', :md => "##"} 
-FuncParam = {:ark_doc => '@', :md => '    '}
+FuncParam = '@'
 ObjectType = [{:ark_doc => '<', :md => Bold}, {:ark_doc => '>', :md => ""}]
-ObjectPseudo = [{:ark_doc => '{', :md => Underscore}, {:ark_doc => '}', :md => ""}]
-Desc = {:ark_doc => ':', :md => NewLine}
+ObjectPseudo = [{:ark_doc => '{', :md => Italic}, {:ark_doc => '}', :md => ""}]
+Desc = NewLine

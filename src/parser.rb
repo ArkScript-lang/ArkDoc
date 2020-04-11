@@ -57,31 +57,43 @@ def rm_tab(str_src)
 	return buf
 end
 
-def to_psmd(buf)
+def auto_gen_proto(buf)
 	buff = ""
 
+	
+
+	return buff
+end
+
+def to_psmd(buf)
+	buff = ""
+	old_c = ''
+
 	buf.each_char { |c|
-		# function brief
+		# function arranging
+		## function brief
 		if c == FuncBrief[:ark_doc]
+			old_c = c
 			buff << FuncBrief[:md]
 			buff << Bold
 			next
 		end 
 
-		# function description
-		if c == Desc[:ark_doc]
+		## function description
+		if old_c == FuncBrief[:ark_doc] && c == Space
+			old_c = Space
 			buff << Bold
-			buff << Desc[:md]
+			buff << Desc
 			next
 		end
 
-		# function paramaters
-		if c == FuncParam[:ark_doc]
-			buff << FuncParam[:md]
+		## function paramaters
+		if c == FuncParam
+			buff << NewLine
 			next
 		end
 
-		## parameter spec
+		### parameter spec
 		if c == ObjectType[0][:ark_doc] || c == ObjectType[1][:ark_doc] 
 			buff << ObjectType[0][:md]
 			next 
@@ -162,6 +174,7 @@ end
 def parser(src_dir)
 	puts("INFO	-  Getting of documentation content")
 	str_src = rm_tab(get_text(src_dir + "*.ark"))
+	puts(uncomment(str_src))
 
 	return get_content(to_psmd(uncomment(str_src)))
 end

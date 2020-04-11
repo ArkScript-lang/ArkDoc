@@ -7,10 +7,11 @@ def make_yml(site_name, dir, src_dir, files)
 	yml = File.open(dir + "mkdocs.yml", "w")
 	labels = get_labels(to_psmd(uncomment(rm_tab(get_text(src_dir + "*.ark")))))
 
-	# define site name
+	# yaml config file writing
+	## define site name
 	yml.write("site_name: ")
 	yml.write(site_name + NewLine)
-	# add pages
+	## add pages
 	yml.write("nav:")
 	yml.write(NewLine)
 	labels.each { |e|
@@ -31,14 +32,13 @@ def make_yml(site_name, dir, src_dir, files)
 		yml.write(NewLine)
 	}
 
-	# end of write config file
+	## end of write config file
 	yml.close
 end
 
 def make_md(files, doc_dir)
 	md_dir = doc_dir + "docs/"
 	take = false
-	md = []
 
 	if !Dir.exist?(md_dir)
 		Dir.mkdir(md_dir)
@@ -66,11 +66,11 @@ def make_md(files, doc_dir)
 end
 
 def get_doc_dir(site_name)
-	return "./docs/" + site_name + '/'
+	return "docs/" + site_name + '/'
 end
 
 def gen(site_name)
-	files = parser("./ark/")
+	files = parser("ark/")
 	doc_dir = get_doc_dir(site_name)
 
 	puts("INFO	-  Constructing of the site for documentation")
@@ -78,6 +78,6 @@ def gen(site_name)
 		Dir.mkdir(doc_dir)
 	end
 
-	make_yml(site_name, doc_dir,"./ark/", files)
+	make_yml(site_name, doc_dir,"ark/", files)
 	make_md(files, doc_dir)
 end
