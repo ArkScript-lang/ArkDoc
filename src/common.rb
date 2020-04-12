@@ -11,4 +11,8 @@ class String
 
 		return ary
 	end
+
+	def end
+		return (self.size - 1)
+	end
 end

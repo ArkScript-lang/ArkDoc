@@ -57,10 +57,47 @@ def rm_tab(str_src)
 	return buf
 end
 
+def end_block(buf)
+	i = 0
+
+	while i < buf.size 
+		return i if buf[i] == CPar
+		i += 1
+	end
+
+	return 0
+end
+
 def auto_gen_proto(buf)
 	buff = ""
+	old_c = ''
+	i = 0
 
-	
+	buf.each_char { |c|
+		old_c = c if c == FuncBrief[:ark_doc]
+		if old_c == FuncBrief[:ark_doc] && c == Space
+			old_c = c
+			block = buf[i..(end_block(buf[i..buf.end]) + i)]
+			proto = "("
+			take = false
+
+			block.each_char { |chr|
+				if chr == FuncParam
+					take = true
+					proto << Space if proto != OPar
+					next 
+				end
+				take = false if chr == Space
+				proto << chr if take
+			} 
+
+			proto << CPar
+			buff << proto
+		end
+
+		buff << c
+		i += 1
+	}
 
 	return buff
 end
@@ -69,6 +106,7 @@ def to_psmd(buf)
 	buff = ""
 	old_c = ''
 
+	#auto_gen_proto(buf)
 	buf.each_char { |c|
 		# function arranging
 		## function brief
@@ -80,8 +118,9 @@ def to_psmd(buf)
 		end 
 
 		## function description
-		if old_c == FuncBrief[:ark_doc] && c == Space
-			old_c = Space
+		if old_c == FuncBrief[:ark_doc] && c == CPar
+			old_c = c
+			buff << CPar
 			buff << Bold
 			buff << Desc
 			next
@@ -89,11 +128,14 @@ def to_psmd(buf)
 
 		## function paramaters
 		if c == FuncParam
+			old_c = c
 			buff << NewLine
+			buff <<  Bold
 			next
 		end
 
 		### parameter spec
+=begin
 		if c == ObjectType[0][:ark_doc] || c == ObjectType[1][:ark_doc] 
 			buff << ObjectType[0][:md]
 			next 
@@ -102,6 +144,12 @@ def to_psmd(buf)
 		if c == ObjectPseudo[0][:ark_doc] || c == ObjectPseudo[1][:ark_doc]
 			buff << ObjectPseudo[0][:md]
 			next 
+		end
+=end
+
+		if old_c == FuncParam && c == Space
+			old_c = c
+			buff << Bold
 		end
 
 		buff << c
@@ -173,10 +221,11 @@ end
 
 def parser(src_dir)
 	puts("INFO	-  Getting of documentation content")
-	str_src = rm_tab(get_text(src_dir + "*.ark"))
-	puts(uncomment(str_src))
+	str_src = auto_gen_proto(rm_tab(get_text(src_dir + "*.ark")))
+	#puts(uncomment(str_src))
+	#puts(to_psmd(uncomment(str_src)))
 
 	return get_content(to_psmd(uncomment(str_src)))
 end
 
-#puts parser("../ark/")
+#parser("../ark/")
