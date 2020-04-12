@@ -3,7 +3,8 @@ $LOAD_PATH << '.'
 require "common.rb"
 require "syntax.rb"
 
-
+# get doc blocks
+## get .ark files path
 def get_files(paths)
 	files = []	
 
@@ -14,7 +15,8 @@ def get_files(paths)
 	return files
 end
 
-def get_text(src)
+## get usable doc blocks from .ark files
+def get_blocks(src)
 	files = get_files(Dir.glob(src))
 	take = false
 	str = ""
@@ -46,6 +48,7 @@ def get_text(src)
 	return str
 end
 
+## remove all tabulations in blocks
 def rm_tab(str_src)
 	buf = ""
 
@@ -57,6 +60,8 @@ def rm_tab(str_src)
 	return buf
 end
 
+# generate function prototype
+## get end of one doc block 
 def end_block(buf)
 	i = 0
 
@@ -68,6 +73,7 @@ def end_block(buf)
 	return 0
 end
 
+# insert prototypes in blocks
 def auto_gen_proto(buf)
 	buff = ""
 	old_c = ''
@@ -102,11 +108,30 @@ def auto_gen_proto(buf)
 	return buff
 end
 
+# convert blocks to pseudo markdown
+## uncomment doc blocks
+def uncomment(buf)
+	buff = ""
+
+	buf.each_line { |line|
+		bline = ""
+		i = 0
+		while i < line.size
+			bline << line[i] if i > 0
+			i += 1
+		end
+
+		buff << bline
+	}
+
+	return buff
+end
+
+# to pseudo markdown
 def to_psmd(buf)
 	buff = ""
 	old_c = ''
 
-	#auto_gen_proto(buf)
 	buf.each_char { |c|
 		# function arranging
 		## function brief
@@ -134,19 +159,6 @@ def to_psmd(buf)
 			next
 		end
 
-		### parameter spec
-=begin
-		if c == ObjectType[0][:ark_doc] || c == ObjectType[1][:ark_doc] 
-			buff << ObjectType[0][:md]
-			next 
-		end
-
-		if c == ObjectPseudo[0][:ark_doc] || c == ObjectPseudo[1][:ark_doc]
-			buff << ObjectPseudo[0][:md]
-			next 
-		end
-=end
-
 		if old_c == FuncParam && c == Space
 			old_c = c
 			buff << Bold
@@ -158,26 +170,12 @@ def to_psmd(buf)
 	return buff
 end
 
-def uncomment(buf)
-	buff = ""
-
-	buf.each_line { |line|
-		bline = ""
-		i = 0
-		while i < line.size
-			bline << line[i] if i > 0
-			i += 1
-		end
-
-		buff << bline
-	}
-
-	return buff
-end
-
+# hold blocks content in corresponding files
+## get markdown files names
 def get_labels(psmd)
 	labels = [] 
-		
+	
+	psmd = psmd.delete('#')
 	psmd.each_line { |line| 
 		label = ""
 		if line[0] == OPar && line[1] == OPar
@@ -188,10 +186,11 @@ def get_labels(psmd)
 			labels.push(label) if !(labels.include?(label))
 		end
 	}
-
+	puts(labels)
 	return labels
 end
 
+# get markdown files content and organize them 
 def get_content(psmd)
 	psmd_ary = psmd.to_a
 	labels = get_labels(psmd)
@@ -219,13 +218,14 @@ def get_content(psmd)
 	return files
 end
 
+# main parse function
 def parser(src_dir)
 	puts("INFO	-  Getting of documentation content")
-	str_src = auto_gen_proto(rm_tab(get_text(src_dir + "*.ark")))
-	#puts(uncomment(str_src))
-	#puts(to_psmd(uncomment(str_src)))
+	doc_blocks = auto_gen_proto(rm_tab(get_blocks(src_dir + "*.ark")))
+	pseudo_md = to_psmd(uncomment(doc_blocks))
+	files = get_content(pseudo_md)
 
-	return get_content(to_psmd(uncomment(str_src)))
+	return files
 end
 
 #parser("../ark/")
