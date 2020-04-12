@@ -5,7 +5,7 @@ require "parser.rb"
 
 def make_yml(site_name, dir, src_dir, files)
 	yml = File.open(dir + "mkdocs.yml", "w")
-	labels = get_labels(to_psmd(uncomment(rm_tab(get_text(src_dir + "*.ark")))))
+	labels = get_labels(rm_tab(get_blocks(src_dir + "*.ark")))
 
 	# yaml config file writing
 	## define site name
