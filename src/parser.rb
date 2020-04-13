@@ -116,8 +116,11 @@ def uncomment(buf)
 	buf.each_line { |line|
 		bline = ""
 		i = 0
+		jump = nil
+
 		while i < line.size
-			bline << line[i] if i > 0
+			jump = line.index('#')
+			bline << line[i] if i != jump
 			i += 1
 		end
 
@@ -127,22 +130,22 @@ def uncomment(buf)
 	return buff
 end
 
-# to pseudo markdown
+## to pseudo markdown
 def to_psmd(buf)
 	buff = ""
 	old_c = ''
 
 	buf.each_char { |c|
-		# function arranging
-		## function brief
+		### function arranging
+		#### function brief
 		if c == FuncBrief[:ark_doc]
 			old_c = c
 			buff << FuncBrief[:md]
 			buff << Bold
 			next
-		end 
+		end
 
-		## function description
+		#### function description
 		if old_c == FuncBrief[:ark_doc] && c == CPar
 			old_c = c
 			buff << CPar
@@ -151,7 +154,7 @@ def to_psmd(buf)
 			next
 		end
 
-		## function paramaters
+		##### function paramaters
 		if c == FuncParam
 			old_c = c
 			buff << NewLine
@@ -164,6 +167,12 @@ def to_psmd(buf)
 			buff << Bold
 		end
 
+		### code examples
+		if c == CodeExample[0][:ark_doc]
+			buff << CodeExample[0][:md]
+			next 
+		end
+
 		buff << c
 	}
 
@@ -172,11 +181,11 @@ end
 
 # hold blocks content in corresponding files
 ## get markdown files names
-def get_labels(psmd)
+def get_labels(blocks)
 	labels = [] 
 	
-	psmd = psmd.delete('#')
-	psmd.each_line { |line| 
+	blocks = blocks.delete('#')
+	blocks.each_line { |line| 
 		label = ""
 		if line[0] == OPar && line[1] == OPar
 			line.each_char { |c|
@@ -186,7 +195,7 @@ def get_labels(psmd)
 			labels.push(label) if !(labels.include?(label))
 		end
 	}
-	puts(labels)
+
 	return labels
 end
 
@@ -222,6 +231,8 @@ end
 def parser(src_dir)
 	puts("INFO	-  Getting of documentation content")
 	doc_blocks = auto_gen_proto(rm_tab(get_blocks(src_dir + "*.ark")))
+	puts("====doc_blocks====")
+	puts(doc_blocks)
 	pseudo_md = to_psmd(uncomment(doc_blocks))
 	files = get_content(pseudo_md)
 

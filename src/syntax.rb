@@ -15,6 +15,5 @@ Space = ' '
 
 FuncBrief = {:ark_doc => '\\', :md => "##"} 
 FuncParam = '@'
-ObjectType = [{:ark_doc => '<', :md => Bold}, {:ark_doc => '>', :md => ""}]
-ObjectPseudo = [{:ark_doc => '{', :md => Italic}, {:ark_doc => '}', :md => ""}]
+CodeExample = [{:ark_doc => '`', :md => "```"}, {:ark_doc => '`', :md => "```"}]
 Desc = NewLine
