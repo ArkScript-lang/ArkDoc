@@ -6,24 +6,26 @@ It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkd
 ## Dependencies
 
 + Python 2.7 or higher
-```bash
-~$ pip install mkdocs 
-```
+
 + Ruby 2.5 or higher
 
 
 ## Usage
 
 ```bash
-# clone repository
+# Clone repository
 ~$ git clone https://github.com/ArkScript-lang/ArkDoc.git
 # It's in this folder the doc site will build
 ~/ArkDoc$ mkdir docs
 # Put your arkscripts in this folder 
 ~/ArkDoc$ mkdir ark
-# build site in docs/[SITE_NAME]/site
+# Install Mkdocs
+~$ pip install mkdocs 
+# Build site in docs/[SITE_NAME]/site
 ~/ArkDoc$ ruby start.rb gen [SITE_NAME]
 ```
+
+
 ## Syntax
 
 `\` : For function brief begin
@@ -36,6 +38,7 @@ It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkd
 
 `/` : Escape character (place this char before you special char to avoid md conversion )
 
+
 ## Example
 
 ```clojure
@@ -46,12 +49,12 @@ It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkd
 	#@n a number
 	#`
 	#	{
-    #		(let fibo (fun (n)
-    #   	 	(if (< n 2)
-    #   	     	n
-    #   	     	(+ (fibo (- n 1)) (fibo (- n 2))))))
-    #	
-    #		(print (fibo 28))  # display 317811
+	#		(let fibo (fun (n)
+	#   	 	(if (< n 2)
+	#   	     	n
+	#   	     	(+ (fibo (- n 1)) (fibo (- n 2))))))
+	#	
+	#		(print (fibo 28))  # display 317811
 	#	}
 	#`
 	#)
@@ -61,4 +64,5 @@ It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkd
 			(+ (fibo (- n 1)) (fibo (- n 2))))))
 }
 ```
+
 ![basic mode](./images/example.png)
