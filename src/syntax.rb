@@ -13,6 +13,7 @@ Each = '-'
 Coma = ','
 Space = ' '
 
+PageTitle = {:ark_doc => '!', :md => '#'}
 FuncBrief = {:ark_doc => '\\', :md => "##"} 
 FuncParam = '@'
 CodeExample = [{:ark_doc => '`', :md => "```"}, {:ark_doc => '`', :md => "```"}]

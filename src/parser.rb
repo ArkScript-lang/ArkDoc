@@ -136,6 +136,12 @@ def to_psmd(buf)
 	old_c = ''
 
 	buf.each_char { |c|
+		### page title
+		if c == PageTitle[:ark_doc]
+			buff << PageTitle[:md]
+			next
+		end
+
 		### function arranging
 		#### function brief
 		if c == FuncBrief[:ark_doc]
@@ -165,6 +171,7 @@ def to_psmd(buf)
 		if old_c == FuncParam && c == Space
 			old_c = c
 			buff << Bold
+			next
 		end
 
 		### code examples
@@ -199,7 +206,8 @@ def get_labels(blocks)
 	return labels
 end
 
-# get markdown files content and organize them 
+# get markdown files content and organize them
+## organize the files content
 def get_content(psmd)
 	psmd_ary = psmd.to_a
 	labels = get_labels(psmd)
@@ -227,14 +235,61 @@ def get_content(psmd)
 	return files
 end
 
+## get page(s) title(s)
+def get_title_block(str)
+	indexes = {:begin => nil, :end => nil}
+	i = 0
+
+	while i < str.size
+		if str[i - 1] == NewLine
+			if str[i] == PageTitle[:md] && str[i + 1] != PageTitle[:md]
+				indexes[:begin] = i					
+			end
+
+			if indexes[:begin] != nil
+				if (str[i] == PageTitle[:md] || str[i] == CodeExample[0][:md][0]) && i > indexes[:begin]
+					indexes[:end] = i - 1
+				end
+			end
+		end
+
+		if i == str.end && indexes[:end] == nil					
+			indexes[:end] = str.end
+		end
+
+		i += 1
+	end
+
+	return indexes
+end
+
+def find_title(untitled_files)
+	files = [] 
+
+	untitled_files.each { |e|
+		e.each_key { |key|
+			title_block = get_title_block(e[key])
+			str = (e[key])[title_block[:begin]..title_block[:end]].add_nw
+			i = 0
+
+			while i < e[key].size
+				str << e[key][i] if i < title_block[:begin] || i > title_block[:end]
+				i += 1
+			end
+
+			files.push({key => str})
+		}
+	}
+
+	return files
+end
+
 # main parse function
 def parser(src_dir)
 	puts("INFO	-  Getting of documentation content")
-	doc_blocks = auto_gen_proto(rm_tab(get_blocks(src_dir + "*.ark")))
-	puts("====doc_blocks====")
-	puts(doc_blocks)
+	doc_blocks =  auto_gen_proto(rm_tab(get_blocks(src_dir + "*.ark")))
 	pseudo_md = to_psmd(uncomment(doc_blocks))
-	files = get_content(pseudo_md)
+	files = find_title(get_content(pseudo_md))
 
 	return files
 end
