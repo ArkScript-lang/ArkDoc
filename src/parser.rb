@@ -93,10 +93,11 @@ def auto_gen_proto(buf)
 					proto << Space if proto != OPar
 					next 
 				end
-				take = false if chr == Space
+				take = false if chr == Space || chr == PageTitle[:ark_doc]
 				proto << chr if take
 			} 
 
+			proto = proto.delete(NewLine).delete(PageTitle[:md])
 			proto << CPar
 			buff << proto
 		end
@@ -168,10 +169,9 @@ def to_psmd(buf)
 			next
 		end
 
-		if old_c == FuncParam && c == Space
+		if old_c == FuncParam && (c == Space || c == NewLine)
 			old_c = c
 			buff << Bold
-			next
 		end
 
 		### code examples
@@ -293,5 +293,3 @@ def parser(src_dir)
 
 	return files
 end
-
-#parser("../ark/")
