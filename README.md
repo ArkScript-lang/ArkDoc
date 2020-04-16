@@ -1,6 +1,6 @@
 # ArkDoc
 
-It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkdocs](https://github.com/mkdocs/mkdocs), and write in ruby. You probably think : you created a programming language and you don't use it, but for to your answer : _yes, we will probably use ArkScript in a update_.
+It's **Lite** documentation gen for arkscript (.ark) based on Mkdocs, and write in ruby. You probably think : you created a programming language and you don't use it, but for to answer you : _yes, we will probably use ArkScript in a next one update_.
 
 
 ## Dependencies
@@ -40,7 +40,6 @@ It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkd
 
 
 ## Example
-
 ```clojure
 {
 	#(([Home]index)
@@ -61,8 +60,7 @@ It's **Lite** documentation gen for arkscript sources files (.ark) based on [Mkd
 	(let fibo (fun (n)
 		(if (< n 2)
 			n
-			(+ (fibo (- n 1)) (fibo (- n 2))))))
+		(+ (fibo (- n 1)) (fibo (- n 2))))))
 }
 ```
-
 ![basic mode](./images/example.png)
