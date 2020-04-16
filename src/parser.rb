@@ -137,6 +137,17 @@ def to_psmd(buf)
 	old_c = ''
 
 	buf.each_char { |c|
+		### escape char
+		if c == Escape
+			old_c = c
+			next
+		end
+
+		if old_c == Escape && c.match(Alpha) == nil
+			buff << c
+			next			
+		end
+
 		### page title
 		if c == PageTitle[:ark_doc]
 			buff << PageTitle[:md]

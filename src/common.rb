@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -wKU
 require "syntax.rb"
-
+Alpha = /[[:alpha:]]/
 
 class String
 	

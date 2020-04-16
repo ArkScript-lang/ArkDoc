@@ -12,6 +12,7 @@ CBracket = ']'
 Each = '-'
 Coma = ','
 Space = ' '
+Escape = '/'
 
 PageTitle = {:ark_doc => '!', :md => '#'}
 FuncBrief = {:ark_doc => '\\', :md => "##"} 
