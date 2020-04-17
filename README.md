@@ -49,10 +49,10 @@ It's **Lite** documentation gen for arkscript (.ark) based on Mkdocs, and write 
 	#`
 	#	{
 	#		(let fibo (fun (n)
-	#   	 	(if (< n 2)
-	#   	     	n
-	#   	     	(+ (fibo (- n 1)) (fibo (- n 2))))))
-	#	
+	#			(if (< n 2)
+	#				n
+	#			(+ (fibo (- n 1)) (fibo (- n 2))))))
+	#
 	#		(print (fibo 28))  # display 317811
 	#	}
 	#`
