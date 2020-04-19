@@ -10,7 +10,7 @@ CPar = ')'
 OBracket = '['
 CBracket = ']'
 Each = '-'
-Coma = ','
+Comma = ','
 Space = ' '
 Escape = '/'
 
