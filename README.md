@@ -5,9 +5,9 @@ It's **Lite** documentation gen for arkscript (.ark) based on Mkdocs, and write 
 
 ## Dependencies
 
-+ Python 2.7 or higher
++ Python >= 2.7
 
-+ Ruby 2.5 or higher
++ Ruby >= 2.5
 
 
 ## Usage
