@@ -1,23 +1,21 @@
 # ArkDoc
 
-It's **Lite** documentation gen for arkscript (.ark) based on Mkdocs, and write in ruby. You probably think : you created a programming language and you don't use it, but for to answer you : _yes, we will probably use ArkScript in a next one update_.
+It's a **Lite** documentation generator for arkscript (.ark) based on Mkdocs, and written in ruby. You probably think: you created a programming language and you don't use it, but to answer you : _yes, we will probably use ArkScript in a next update_.
 
 
 ## Dependencies
 
-+ Python >= 2.7
-
-+ Ruby >= 2.5
-
+* Python >= 2.7 (Python 3.7 tested and working)
+* Ruby >= 2.5
 
 ## Usage
 
 ```bash
 # Clone repository
 ~$ git clone https://github.com/ArkScript-lang/ArkDoc.git
-# It's in this folder the doc site will build
+# The documentation will be generated in this folder
 ~/ArkDoc$ mkdir docs
-# Put your arkscripts in this folder 
+# Put your arkscripts in this folder
 ~/ArkDoc$ mkdir ark
 # Install Mkdocs
 ~$ pip install mkdocs 
@@ -25,19 +23,17 @@ It's **Lite** documentation gen for arkscript (.ark) based on Mkdocs, and write 
 ~/ArkDoc$ ruby start.rb gen [SITE_NAME]
 ```
 
-
 ## Syntax
 
-`\` : For function brief begin
+`\`: For function brief begin
 
-`@` : For function parameter 
+`@`: For function parameter 
 
-\` code example \` : code example
+\` code example \`: code example
 
-`!` : Page title
+`!`: Page title
 
-`/` : Escape character (place this char before you special char to avoid md conversion )
-
+`/`: Escape character (place this char before any special char to avoid md conversion)
 
 ## Example
 ```clojure
