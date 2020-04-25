@@ -144,6 +144,7 @@ def to_psmd(buf)
 		end
 
 		if old_c == Escape && c.match(Alpha) == nil
+			old_c = c
 			buff << c
 			next			
 		end
