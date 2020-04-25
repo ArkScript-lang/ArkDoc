@@ -268,6 +268,8 @@ def get_title_block(str)
 			indexes[:end] = str.end
 		end
 
+		break if indexes[:begin] != nil && indexes[:end] != nil
+
 		i += 1
 	end
 
