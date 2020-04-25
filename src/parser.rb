@@ -3,6 +3,7 @@ $LOAD_PATH << '.'
 require "common.rb"
 require "syntax.rb"
 
+
 # get doc blocks
 ## get .ark files path
 def get_files(paths)
@@ -187,8 +188,8 @@ def to_psmd(buf)
 		end
 
 		### code examples
-		if c == CodeExample[0][:ark_doc]
-			buff << CodeExample[0][:md]
+		if c == CodeExample[:ark_doc]
+			buff << CodeExample[:md]
 			next 
 		end
 

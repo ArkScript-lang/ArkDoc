@@ -2,6 +2,7 @@
 require "syntax.rb"
 Alpha = /[[:alpha:]]/
 
+
 class String
 	
 	def to_a
