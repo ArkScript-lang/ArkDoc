@@ -177,13 +177,13 @@ def to_psmd(buf)
 		if c == FuncParam
 			old_c = c
 			buff << NewLine
-			buff <<  Bold
+			buff << Bold
 			next
 		end
 
 		if old_c == FuncParam && (c == Space || c == NewLine)
 			old_c = c
-			buff << Bold
+			buff << Bold if buff[buff.end] != FuncParam
 		end
 
 		### code examples
