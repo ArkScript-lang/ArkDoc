@@ -69,8 +69,8 @@ def get_doc_dir(site_name)
 	return "docs/" + site_name + '/'
 end
 
-def gen(site_name)
-	files = parser("ark/")
+def gen(site_name, source_dir)
+	files = parser(source_dir)
 	doc_dir = get_doc_dir(site_name)
 
 	puts("INFO	-  Constructing of the site for documentation")
@@ -78,6 +78,6 @@ def gen(site_name)
 		Dir.mkdir(doc_dir)
 	end
 
-	make_yml(site_name, doc_dir,"ark/", files)
+	make_yml(site_name, doc_dir, source_dir, files)
 	make_md(files, doc_dir)
 end
