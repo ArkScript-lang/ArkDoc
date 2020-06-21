@@ -15,11 +15,13 @@ It's a **Lite** documentation generator for arkscript (.ark) based on Mkdocs, an
 ~$ git clone https://github.com/ArkScript-lang/ArkDoc.git
 # The documentation will be generated in this folder
 ~/ArkDoc$ mkdir docs
-# Put your arkscripts in this folder
+# Put your arkscripts in this folder (default source directory)
 ~/ArkDoc$ mkdir ark
 # Install Mkdocs
-~$ pip install mkdocs 
-# Build site in docs/[SITE_NAME]/site
+~$ pip install mkdocs
+# Print help
+~/ArkDoc$ ruby start.rb -h 
+# Build site in docs/[SITE_NAME]/site with default source directory
 ~/ArkDoc$ ruby start.rb gen [SITE_NAME]
 ```
 
