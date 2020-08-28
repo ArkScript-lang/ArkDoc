@@ -6,52 +6,43 @@ class Lexer
     attr_reader :tokens, :block
     BLOCK_BEGIN = "####"
     BLOCK_END = "###"
-    KEYWORDS = ["@meta", "@title", "@desc", "@brief", "@details", "@code", "@endcode", "@param", "@author"]
+    KEYWORDS = ["@meta", "@title", "@desc", "@brief", "@details", "@param", "@author", "---"]
 
-    def initialize(ark_path)
-        @ark_path = ark_path
-        @files = []
-        @block = block
-        @tokens = {}
+    def initialize
+        @ark_path = "../ark/"
+        @tokens = {}.compare_by_identity
     end
 
     def tokenize
-        i = 0
-        block_ary = @block.lines
+        files_paths = Dir.new(@ark_path)
 
-        while i < block_ary.size
-            chunk = block_ary[i]
+        files_paths.each_child do |file_path|
+            tmp = File.new(@ark_path + file_path)
 
-            if identifier = chunk[/\A(@[a-z]\w*)/, 1]
-                if KEYWORDS.include?(identifier)
-                    id = identifier.lstrip.upcase.to_sym
-                    value = (chunk[identifier.size..-1]).delete_at(0)
+            tmp.each do |line|
+                chunk = cl_line(line)
 
-                    @tokens[id] = value
+                if identifier = chunk[/\A(@[a-z]\w*)/, 1]
+                    if KEYWORDS.include?(identifier)
+                        id = identifier.lstrip.upcase.delete('@')
+                        value = (chunk[identifier.size..-1]).delete_at(0)
+
+                        @tokens[id] = value
+                    end
                 end
             end
-
-            i += 1
         end
     end
 
     private
-    def uncomment
-        @block = @block.delete('#')
-    end
+    def cl_line(line)
+        cleared_line = line.delete('#').lstrip
 
-    def get_files
-        ark_path.each { |e|
-            @files << File.new(e)
-        }
-    end
-
-    def get_blocks(str_src)
-        
+        return cleared_line
     end
 end
 
-l = Lexer.new()
+l = Lexer.new
 puts("===TOKENS===")
 l.tokenize
-print(l.tokens)
+puts(l.tokens)
