@@ -20,7 +20,7 @@ It's a **Lite** documentation generator for arkscript (.ark) based on Mkdocs, an
 # Install Mkdocs
 ~$ pip install mkdocs
 # Print help
-~/ArkDoc$ ruby start.rb -h 
+~/ArkDoc$ ruby start.rb -h
 # Build site in docs/[SITE_NAME]/site with default source directory
 ~/ArkDoc$ ruby start.rb gen [SITE_NAME]
 ```
@@ -29,7 +29,7 @@ It's a **Lite** documentation generator for arkscript (.ark) based on Mkdocs, an
 
 `\`: For function brief begin
 
-`@`: For function parameter 
+`@`: For function parameter
 
 \` code example \`: code example
 

@@ -1,33 +1,57 @@
 #!/usr/bin/env ruby -wKU
+$LOAD_PATH << '.'
+require "common.rb"
 
 class Lexer
-	attr_reader :tokens
+    attr_reader :tokens, :block
+    BLOCK_BEGIN = "####"
+    BLOCK_END = "###"
+    KEYWORDS = ["@meta", "@title", "@desc", "@brief", "@details", "@code", "@endcode", "@param", "@author"]
 
-	def initialize
-		@KeyWords = ["@meta", "@brief", ]
-		@tokens = []
-	end
+    def initialize(ark_path)
+        @ark_path = ark_path
+        @files = []
+        @block = block
+        @tokens = {}
+    end
 
-	def tokenize(code)
-		i = 0
+    def tokenize
+        i = 0
+        block_ary = @block.lines
 
-		while i < code.size
-			chunk = code[i..-1]
+        while i < block_ary.size
+            chunk = block_ary[i]
 
-			if identifier = chunk[/\A(@[a-z]\w*)/, 1]
-				if @KeyWords.include?(identifier)
-					@tokens << [identifier.upcase.to_sym]
-				end
+            if identifier = chunk[/\A(@[a-z]\w*)/, 1]
+                if KEYWORDS.include?(identifier)
+                    id = identifier.lstrip.upcase.to_sym
+                    value = (chunk[identifier.size..-1]).delete_at(0)
 
-				i += identifier.size
-			end
+                    @tokens[id] = value
+                end
+            end
 
-			i += 1
-		end
-	end
+            i += 1
+        end
+    end
+
+    private
+    def uncomment
+        @block = @block.delete('#')
+    end
+
+    def get_files
+        ark_path.each { |e|
+            @files << File.new(e)
+        }
+    end
+
+    def get_blocks(str_src)
+        
+    end
 end
 
-l = Lexer.new
-l.tokenize("@meta ppharel")
+l = Lexer.new()
 puts("===TOKENS===")
-puts(l.tokens)
+l.tokenize
+print(l.tokens)

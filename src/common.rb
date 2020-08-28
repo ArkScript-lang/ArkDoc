@@ -4,32 +4,47 @@ Alpha = /[[:alpha:]]/
 
 
 class String
-	
-	def to_a
-		ary = []
 
-		self.each_line { |line|
-			ary.push(line)
-		}
+    def to_a
+        ary = []
 
-		return ary
-	end
+        self.each_line { |line|
+            ary.push(line)
+        }
 
-	def end
-		return (self.size - 1)
-	end
+        return ary
+    end
 
-	def add_nw
-		buf = ""
+    def end
+        return (self.size - 1)
+    end
 
-		self.each_char { |c|
-			if c == NewLine
-				buf << NewLine
-			end
+    def add_nw
+        buf = ""
 
-			buf << c
-		}
+        self.each_char { |c|
+            if c == NewLine
+                buf << NewLine
+            end
 
-		self.replace(buf)
-	end
+            buf << c
+        }
+
+        self.replace(buf)
+    end
+
+    def delete_at(idx)
+        nw_str = ""
+        i = 0
+
+        while i < self.size
+            if i != idx
+                nw_str << self[i]
+            end
+
+            i += 1
+        end
+
+        return nw_str
+    end
 end
