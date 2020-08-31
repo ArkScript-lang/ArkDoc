@@ -3,14 +3,14 @@ $LOAD_PATH << '.'
 require "common.rb"
 
 class Lexer
-    attr_reader :tokens, :block
+    attr_reader :tokens
     BLOCK_BEGIN = "####"
     BLOCK_END = "###"
     KEYWORDS = ["@meta", "@title", "@desc", "@brief", "@details", "@param", "@author", "---"]
 
     def initialize
         @ark_path = "../ark/"
-        @tokens = {}.compare_by_identity
+        @tokens = []
     end
 
     def tokenize
@@ -18,31 +18,45 @@ class Lexer
 
         files_paths.each_child do |file_path|
             tmp = File.new(@ark_path + file_path)
+            tmp_tokens = {}.compare_by_identity
+            block = false
 
             tmp.each do |line|
                 chunk = cl_line(line)
 
-                if identifier = chunk[/\A(@[a-z]\w*)/, 1]
-                    if KEYWORDS.include?(identifier)
-                        id = identifier.lstrip.upcase.delete('@')
-                        value = (chunk[identifier.size..-1]).delete_at(0)
+                if block
+                    chunk = uncomment(chunk)
 
-                        @tokens[id] = value
+                    if identifier = chunk[/\A(@[a-z]\w*)/, 1]
+                        if KEYWORDS.include?(identifier)
+                            id = identifier.lstrip.upcase.delete('@')
+                            value = (chunk[identifier.size..-1]).delete_at(0)
+                            tmp_tokens[id] = value
+                        end
                     end
                 end
+
+                if chunk.strip == BLOCK_BEGIN && block == false
+                    block = true
+                elsif chunk.strip == BLOCK_END && block == true
+                    block = false
+                end
             end
+
+            @tokens << tmp_tokens
         end
     end
 
     private
     def cl_line(line)
-        cleared_line = line.delete('#').lstrip
+        cleared_line = line.lstrip
 
         return cleared_line
     end
-end
 
-l = Lexer.new
-puts("===TOKENS===")
-l.tokenize
-puts(l.tokens)
+    def uncomment(line)
+        uncline = line.delete('#').lstrip
+
+        return uncline
+    end
+end
