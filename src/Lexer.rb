@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby -wKU
-$LOAD_PATH << '.'
-require "common.rb"
 
 class Lexer
     attr_reader :tokens
@@ -24,23 +22,16 @@ class Lexer
             tmp.each do |line|
                 chunk = cl_line(line)
 
-                if block
-                    chunk = uncomment(chunk)
+                chunk = uncomment(chunk)
 
-                    if identifier = chunk[/\A(@[a-z]\w*)/, 1]
-                        if KEYWORDS.include?(identifier)
-                            id = identifier.lstrip.upcase.delete('@')
-                            value = (chunk[identifier.size..-1]).delete_at(0)
-                            tmp_tokens[id] = value
-                        end
+                if identifier = chunk[/\A(@[a-z]\w*)/, 1]
+                    if KEYWORDS.include?(identifier)
+                        id = identifier.lstrip.upcase.delete('@')
+                        value = (chunk[identifier.size..-1]).lstrip
+                        tmp_tokens[id] = value
                     end
                 end
 
-                if chunk.strip == BLOCK_BEGIN && block == false
-                    block = true
-                elsif chunk.strip == BLOCK_END && block == true
-                    block = false
-                end
             end
 
             @tokens << tmp_tokens
@@ -60,3 +51,7 @@ class Lexer
         return uncline
     end
 end
+
+l = Lexer.new
+l.tokenize
+puts(l.tokens)
