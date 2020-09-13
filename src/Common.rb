@@ -5,6 +5,7 @@ Alpha = /[[:alpha:]]/
 
 class String
 
+=begin
     def to_a
         ary = []
 
@@ -32,6 +33,7 @@ class String
 
         self.replace(buf)
     end
+=end
 
     def delete_at(idx)
         nw_str = ""

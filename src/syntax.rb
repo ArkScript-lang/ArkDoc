@@ -15,7 +15,7 @@ Space = ' '
 Escape = '/'
 
 PageTitle = {:ark_doc => '!', :md => '#'}
-FuncBrief = {:ark_doc => '\\', :md => "##"} 
+FuncBrief = {:ark_doc => '\\', :md => "##"}
 FuncParam = '@'
 CodeExample = {:ark_doc => '`', :md => "```"}
 Desc = NewLine
