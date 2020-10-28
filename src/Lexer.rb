@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby -wKU
 $LOAD_PATH << '.'
 require "Extend.rb"
+require "Format.rb"
 
 class Lexer
     attr_reader :tokens
     attr_accessor :ark_path
     Code = ["=begin", "=end"]
-    Keywords = ["@meta", "@title", "@brief", "@param", "@author"]
+    Keywords = ["@meta", "@brief", "@param", "@author"]
 
     def Key(key) Keywords[key].upcase; end
 
@@ -48,20 +49,28 @@ class Lexer
 
                 # keywords tokens
                 if lines[i].include?(Keywords[0]) # meta
-                    file[Key(0)] = Value(0, lines[i])
+                    if (has_desc = Value(0, lines[i]).index(" ")) != nil
+                        meta = Value(0, lines[i]).insert(has_desc, "-").split("-")
+                        # for now support only titles and pages overview
+                        meta[0] = (meta[0] << NewLine) # title
+                        meta[1] = meta[1].lstrip
+                        file["TITLE"] = meta[0]
+                        file["OVERVIEW"] = meta[1]
+                    else
+                        meta = Value(0, lines[i])
+                        file["TITLE"] = meta
+                    end
+                    puts("meta : #{meta}")
                     i += 1
-                elsif lines[i].include?(Keywords[1]) # title (optional)
+                elsif lines[i].include?(Keywords[1]) # brief
+                    file["FUN"] = fun(lines, i)
                     file[Key(1)] = Value(1, lines[i])
                     i += 1
-                elsif lines[i].include?(Keywords[2]) # brief
-                    file["FUN"] = fun(lines, i)
+                elsif lines[i].include?(Keywords[2]) # param
                     file[Key(2)] = Value(2, lines[i])
                     i += 1
-                elsif lines[i].include?(Keywords[3]) # param
+                elsif lines[i].include?(Keywords[3]) # author
                     file[Key(3)] = Value(3, lines[i])
-                    i += 1
-                elsif lines[i].include?(Keywords[4]) # author
-                    file[Key(4)] = Value(4, lines[i])
                     i += 1
                 else
                     i += 1
@@ -97,7 +106,3 @@ class Lexer
         return nil
     end
 end
-
-l = Lexer.new
-l.tokenize
-puts(l.tokens)
