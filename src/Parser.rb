@@ -3,7 +3,7 @@ $LOAD_PATH << '.'
 require "Lexer.rb"
 
 class Parser
-    attr_reader :parsed
+    attr_reader :parsed, :lexer
     def Value(token, key) @lexer.tokens[token][key]; end
 
     def initialize
@@ -27,33 +27,43 @@ class Parser
                     @parsed[file] << Value(i, key)
                     next
                 when "OVERVIEW"
-                    @parsed[file] << Description
-                    @parsed[file] << "Overview"
                     @parsed[file] << NewLine
                     @parsed[file] << Value(i, key)
+                    @parsed[file] << NewLine
                 when "FUN"
                     @parsed[file] << Function
                     @parsed[file] << function(Value(i, key))
                     @parsed[file] << NewLine
                 when "@BRIEF"
                     @parsed[file] << Value(i, key)
+                    @parsed[file] << NewLine
                 when "@PARAM"
+                    param = m_param(Value(i, key))
                     @parsed[file] << Bold
-                    @parsed[file] << Value(i, key).insert(Value(i, key).index(" "), Bold)
+                    @parsed[file] << param[0]
+                    @parsed[file] << Bold
+                    @parsed[file] << param[1]
                     @parsed[file] << NewLine
                 when "CODE"
                     @parsed[file] << Code << NewLine
                     @parsed[file] << Value(i, key)
                     @parsed[file] << Code << NewLine
                 when "@AUTHOR"
+                    @parsed[file] << "Author : "
                     @parsed[file] << author(Value(i, key))
                     @parsed[file] << NewLine
+                when "@DETAILS"
+                    @parsed[file] << Details
+                    @parsed[file] << Value(i, key).strip
+                    @parsed[file] << Details
+                    @parsed[file] << NewLine << NewLine
                 end
             end
 
             i += 1
         end
 
+        puts("parsed : #{@parsed}")
     end
 
     private
@@ -108,10 +118,18 @@ class Parser
 
         return link
     end
-end
 
-p = Parser.new
-p.parse
-puts(p.parsed)
-f = File.open("v.md", "w")
-f.write(p.parsed["Mathematics"])
+    def m_param(token)
+        name = ""
+        details = ""
+
+        token.each_char do |chr|
+            break if chr == " "
+            name << chr
+        end
+
+        details = token[name.size..-1]
+
+        return [name, details]
+    end
+end

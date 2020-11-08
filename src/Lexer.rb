@@ -7,7 +7,7 @@ class Lexer
     attr_reader :tokens
     attr_accessor :ark_path
     Code = ["=begin", "=end"]
-    Keywords = ["@meta", "@brief", "@param", "@author"]
+    Keywords = ["@meta", "@brief", "@param", "@author", "@details"]
 
     def Key(key) Keywords[key].upcase; end
 
@@ -60,7 +60,6 @@ class Lexer
                         meta = Value(0, lines[i])
                         file["TITLE"] = meta
                     end
-                    puts("meta : #{meta}")
                     i += 1
                 elsif lines[i].include?(Keywords[1]) # brief
                     file["FUN"] = fun(lines, i)
@@ -72,6 +71,9 @@ class Lexer
                 elsif lines[i].include?(Keywords[3]) # author
                     file[Key(3)] = Value(3, lines[i])
                     i += 1
+                elsif lines[i].include?(Keywords[4]) # details
+                    file[Key(4)] = Value(4, lines[i])
+                    i += 1
                 else
                     i += 1
                 end
@@ -79,6 +81,8 @@ class Lexer
 
             @tokens << file
         end
+
+        rm_empty
     end
 
     private
@@ -104,5 +108,16 @@ class Lexer
         end
 
         return nil
+    end
+
+    def rm_empty
+        tmp = []
+
+        @tokens.each do |e|
+            next if e == {}
+            tmp << e
+        end
+
+        @tokens = tmp
     end
 end
