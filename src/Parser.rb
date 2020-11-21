@@ -62,8 +62,6 @@ class Parser
 
             i += 1
         end
-
-        puts("parsed : #{@parsed}")
     end
 
     private

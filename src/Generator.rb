@@ -12,7 +12,6 @@ class Generator
     end
 
     def make_yml(doc_name, src_dir = "")
-        puts(Dir.pwd)
         if !Dir.exist?(@docs_path)
             Dir.mkdir(@docs_path)
         end
