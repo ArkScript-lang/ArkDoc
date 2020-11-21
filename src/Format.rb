@@ -7,8 +7,8 @@ Brackets = ['[', ']']
 Parenthesis = ['(', ')']
 
 # parser key elements format
-Title = "# "
-Function = "## "
+Title = "### "
+Function = "#### "
 Code = "```"
 Details = "_"
 
