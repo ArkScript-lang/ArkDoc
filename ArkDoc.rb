@@ -5,12 +5,10 @@ require "Generator.rb"
 
 def help
     puts("Usage : ruby ArkDoc.rb Command [Option] ...")
-    puts("Commands :")
     puts("-H, --help : print help message")
-    puts("-G, --generate [Site name] : generate the site")
-    puts("-M, --md [Site name] : generate the markdown files")
-    puts("-B, --build [Site name] : generate site using .md files")
-    puts("Options :")
+    puts("-G, --generate [options] [Site name] : generate the site")
+    puts("-M, --md [options] [Site name] : generate the markdown files")
+    puts("-B, --build [options] [Site name] : generate site using .md files")
     puts("Generation option :")
     puts("-S, --source [Source directory] : set the source files directory")
 end

@@ -1,6 +1,6 @@
 # ArkDoc
 
-It's a **Lite** documentation generator for arkscript (.ark) based on Mkdocs, and written in ruby. You probably think: you created a programming language and you don't use it, but to answer you : _yes, we will probably use ArkScript in a next update_.
+It's a **Lite** documentation generator for arkscript based on Mkdocs, and written in ruby.
 
 
 ## Dependencies
@@ -16,49 +16,40 @@ It's a **Lite** documentation generator for arkscript (.ark) based on Mkdocs, an
 # The documentation will be generated in this folder
 ~/ArkDoc$ mkdir docs
 # Put your arkscripts in this folder (default source directory)
+# you can change it with -S option
 ~/ArkDoc$ mkdir ark
 # Install Mkdocs
 ~$ pip install mkdocs
 # Print help
-~/ArkDoc$ ruby start.rb -h
+~/ArkDoc$ ruby start.rb -H
 # Build site in docs/[SITE_NAME]/site with default source directory
+# for names with spaces, use this syntax : "Name of Site"
 ~/ArkDoc$ ruby start.rb gen [SITE_NAME]
 ```
-
-## Syntax
-
-`\`: For function brief begin
-
-`@`: For function parameter
-
-\` code example \`: code example
-
-`!`: Page title
-
-`/`: Escape character (place this char before any special char to avoid md conversion)
+You cans find syntax ![here](./Syntax.md).
 
 ## Example
 ```clojure
-{
-	#(([Home]index)
-	#!Numeric
-	#\fibo Calcul fibonacci sequence with n
-	#@n a number
-	#`
-	#	{
-	#		(let fibo (fun (n)
-	#			(if (< n 2)
-	#				n
-	#			(+ (fibo (- n 1)) (fibo (- n 2))))))
-	#
-	#		(print (fibo 28))  # display 317811
-	#	}
-	#`
-	#)
-	(let fibo (fun (n)
-		(if (< n 2)
-			n
-		(+ (fibo (- n 1)) (fibo (- n 2))))))
-}
+###
+# @brief Reverse a string.
+# @param _string the string to reverse
+# @details The original string is left unmodified.
+# =begin
+# (import "String.ark")
+# (let message "hello world, I like goats")
+# (let reversed (str:reverse message))  # => staog ekil I ,dlrow olleh
+# =end
+# @author https://github.com/Natendrtfm
+##
+(let str:reverse (fun (_string) {
+    (mut _index (- (len _string) 1))
+    (mut _returnedString "")
+    (while (> _index -1) {
+        (set _returnedString (+ _returnedString (@ _string _index)))
+        (set _index (- _index 1))
+    })
+    _returnedString
+}))
 ```
-![basic mode](./images/example.png)
+
+![string](./images/example.png)

@@ -9,7 +9,7 @@ body
 h1,h2,h3,h4,h5,h6
 {
 	font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
-	color: #FFFFFF
+	color: #FFFFFF;
 }
 h1 small,h2 small,h3 small,h4 small,h5 small,h6 small,.h1 small,.h2 small,.h3 small,.h4 small,.h5 small,.h6 small,h1 .small,h2 .small,h3 .small,h4 .small,h5 .small,h6 .small,.h1 .small,.h2 .small,.h3 .small,.h4 .small,.h5 .small,.h6 .small
 {
@@ -23,12 +23,20 @@ h1,h2
 {
 	font-weight:700
 }
+h3
+{
+	font-weight: 600;
+}
 h4
 {
+	border-bottom: solid 1px;
+	border-color: #000000;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: #FFFFFF;
 	font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
-	font-weight:300;
+	font-weight:450;
 	margin-top:20px;
-	font-style:italic
 }
 h5
 {
@@ -36,9 +44,13 @@ h5
 	font-weight:300;
 	font-variant:small-caps
 }
-pre,code
+pre
 {
-	background-color:#fcfdff
+	background-color:#161616
+}
+code
+{
+	background-color:#161616;
 }
 pre>code
 {
@@ -46,8 +58,9 @@ pre>code
 }
 pre
 {
-	margin-top:25px;
-	margin-bottom:25px
+	margin-top:20px;
+	margin-bottom:20px;
+	border-spacing: 100px;
 }
 .lead
 {
@@ -65,11 +78,13 @@ pre
 {
 	background-color:#161616;
 	font-family:Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size:13px;
+	font-size:13.5px;
 }
 .well
 {
-	background-color:#fcfdff
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color: rgba(250, 252, 255, 0);
 }
 .btn-default
 {
