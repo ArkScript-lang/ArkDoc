@@ -21,10 +21,10 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 # Install Mkdocs
 ~$ pip install mkdocs
 # Print help
-~/ArkDoc$ ruby start.rb -H
+~/ArkDoc$ ruby ArkDoc.rb -H
 # Build site in docs/[SITE_NAME]/site with default source directory
 # for names with spaces, use this syntax : "Name of Site"
-~/ArkDoc$ ruby start.rb gen [SITE_NAME]
+~/ArkDoc$ ruby ArkDoc.rb --G [SITE_NAME]
 ```
 You cans find syntax ![here](./Syntax.md).
 
