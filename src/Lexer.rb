@@ -15,7 +15,7 @@ class Lexer
     def Value(key, line) (line.refine)[Keywords[key].size..-1].lstrip; end
 
     def initialize
-        @ark_path = "../ark/"
+        @ark_path = "../../ark/"
         @tokens = []
     end
 
