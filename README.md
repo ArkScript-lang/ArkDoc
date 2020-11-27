@@ -1,7 +1,9 @@
-# ArkDoc
+# ArkDoc ![release](https://img.shields.io/github/v/release/ArkScript-lang/ArkDoc)
 
 It's a **Lite** documentation generator for arkscript based on Mkdocs, and written in ruby.
 
+![licence](https://img.shields.io/badge/licence-MPL%202.0-2)
+![code size](https://img.shields.io/github/languages/code-size/ArkScript-lang/ArkDoc)
 
 ## Dependencies
 
