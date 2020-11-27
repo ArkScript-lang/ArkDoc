@@ -70,7 +70,7 @@ class Generator
     end
 
     def generate(site_name, source_path = "")
-        puts("INFO  -  Constructing of the site for documentation")
+        puts("INFO  -  Constructing of the website for documentation")
 
         make_yml(site_name, source_path)
         make_md

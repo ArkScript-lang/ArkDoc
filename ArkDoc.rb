@@ -4,13 +4,14 @@ require "Generator.rb"
 
 
 def help
-    puts("Usage : ruby ArkDoc.rb Command [Option] ...")
-    puts("-H, --help : print help message")
-    puts("-G, --generate [options] [Site name] : generate the site")
-    puts("-M, --md [options] [Site name] : generate the markdown files")
-    puts("-B, --build [options] [Site name] : generate site using .md files")
-    puts("Generation option :")
-    puts("-S, --source [Source directory] : set the source files directory")
+    puts("Usage: ruby ArkDoc.rb [Options] ...")
+    puts("    -H, --help : print this help message")
+    puts("    -G, --generate [options] [Site name] : generate the website")
+    puts("    -M, --md [options] [Site name] : generate the markdown files")
+    puts("    -B, --build [options] [Site name] : generate the website using .md files")
+    puts("")
+    puts("Generation options:")
+    puts("    -S, --source [Source directory] : set the source files directory")
 end
 
 def start
@@ -24,11 +25,13 @@ def start
         help
         return 0
     when "-G", "--generate"
+        source_dir = ""
+        doc_name = ""
         if ARGF.argv[1] == "-S" || ARGF.argv[1] == "--source"
             source_dir = ARGF.argv[2]
             doc_name = ARGF.argv[3]
         else
-            doc_name = ARGF.argv[2]
+            doc_name = ARGF.argv[1]
         end
 
         generator.generate(doc_name, source_dir)
@@ -39,7 +42,7 @@ def start
             source_dir = ARGF.argv[2]
             doc_name = ARGF.argv[3]
         else
-            doc_name = ARGF.argv[2]
+            doc_name = ARGF.argv[1]
         end
 
         generator.generate(doc_name, source_dir)

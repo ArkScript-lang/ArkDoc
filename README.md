@@ -17,7 +17,7 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 ~$ git clone https://github.com/ArkScript-lang/ArkDoc.git
 # The documentation will be generated in this folder
 ~/ArkDoc$ mkdir docs
-# Put your arkscripts in this folder (default source directory)
+# Put your arkscript files in this folder (default source directory)
 # you can change it with -S option
 ~/ArkDoc$ mkdir ark
 # Install Mkdocs
@@ -25,10 +25,10 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 # Print help
 ~/ArkDoc$ ruby ArkDoc.rb -H
 # Build site in docs/[SITE_NAME]/site with default source directory
-# for names with spaces, use this syntax : "Name of Site"
 ~/ArkDoc$ ruby ArkDoc.rb --G [SITE_NAME]
 ```
-You cans find syntax ![here](./Syntax.md).
+
+You cand find the syntax ![here](./Syntax.md).
 
 ## Example
 ```clojure
