@@ -8,12 +8,11 @@
 
 ## 1.0.1
 ### Added
-- commands : `--md` for generation of markdown files only and `--build` for generate the static site
-- options: `--source` to set source code for genrate site or markdown file
-- theme : default theme (dark)
+- options : `--md` for generation of markdown files only,  `--build` for generate the static site and `--source` to set path of source code for generate site or markdown file
+- default theme (dark)
 
 ### Changed
 - code structure
 - Review of : Lexer, Parser and Generator
 - syntax
-- generate command
+- generate option
