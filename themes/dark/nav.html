@@ -16,7 +16,7 @@
             <!-- Main title -->
 
             {% if not config.theme.disable_nav_site_name %}
-            <a class="navbar-brand" href="{{ nav.homepage.url|url }}"> <img src="https://raw.githubusercontent.com/ArkScript-lang/ArkDoc/master/images/ArkTransparent-by-mazz.png" width="52" height="16"></a>
+              <a class="navbar-brand" href="{{ nav.homepage.url|url }}">{{ config.site_name }}</a>
             {% endif %}
         </div>
 
