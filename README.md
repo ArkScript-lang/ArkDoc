@@ -13,22 +13,39 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 ## Usage
 
 ```bash
-# Clone repository
+# first, clone repository
 ~$ git clone https://github.com/ArkScript-lang/ArkDoc.git
-# The documentation will be generated in this folder
-~/ArkDoc$ mkdir docs
-# Put your arkscript files in this folder (default source directory)
-# you can change it with -S option
+~$ cd ArkDoc
+# put your arkscript files in this folder (default source directory)
+# you can change it with -s option
 ~/ArkDoc$ mkdir ark
-# Install Mkdocs
+# install Mkdocs
 ~$ pip install mkdocs
-# Print help
-~/ArkDoc$ ruby ArkDoc.rb -H
-# Build site in docs/[SITE_NAME]/site with default source directory
-~/ArkDoc$ ruby ArkDoc.rb --G [SITE_NAME]
+# running
+~/ArkDoc$ ruby ArkDoc.rb --help
+DESCRIPTION
+      	Lite documentation generator based on Mkdocs
+
+SYPNOSIS
+        ruby ArkDoc.rb -h
+        ruby ArkDoc.rb -v
+        ruby ArkDoc.rb -g [-s <source path>] <site name>
+        ruby ArkDoc.rb -md [-s <source path>] <site name>
+
+OPTIONS
+        -h, --help              Print this help message
+        -v, --version           Print ArkDoc version and exit
+        -g, --generate          Generate the website and exit
+        -md, --markdown         Generate the markdown files and exit
+        -b, --build             Generate the website using markdown files previously generate with -md option
+        -s, --source            Set the path of souree files directory
+
+LICENCE
+        Mozilla Public License 2.0
 ```
 
-You cand find the syntax ![here](./Syntax.md).
+## Syntax
+You can be find the syntax ![here](./Syntax.md).
 
 ## Example
 ```clojure
