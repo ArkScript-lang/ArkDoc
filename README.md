@@ -18,7 +18,7 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 ~$ cd ArkDoc
 # put your arkscript files in this folder (default source directory)
 # you can change it with -s option
-~/ArkDoc$ mkdir ark
+~/ArkDoc$ mkdir source
 # install Mkdocs
 ~$ pip install mkdocs
 # running
@@ -29,15 +29,14 @@ DESCRIPTION
 SYPNOSIS
         ruby ArkDoc.rb -h
         ruby ArkDoc.rb -v
-        ruby ArkDoc.rb -g [-s <source path>] <site name>
-        ruby ArkDoc.rb -md [-s <source path>] <site name>
+        ruby ArkDoc.rb -g <site name> [-s <source path>]
+        ruby ArkDoc.rb -md <site name> [-s <source path>]
 
 OPTIONS
         -h, --help              Print this help message
         -v, --version           Print ArkDoc version and exit
         -g, --generate          Generate the website and exit
         -md, --markdown         Generate the markdown files and exit
-        -b, --build             Generate the website using markdown files previously generate with -md option
         -s, --source            Set the path of souree files directory
 
 LICENCE

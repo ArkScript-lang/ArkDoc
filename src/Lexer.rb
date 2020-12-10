@@ -15,7 +15,7 @@ class Lexer
     def Value(key, line) (line.refine)[Keywords[key].size..-1].lstrip; end
 
     def initialize
-        @ark_path = "../../ark/"
+        @ark_path = "source/"
         @tokens = []
     end
 
@@ -35,10 +35,8 @@ class Lexer
 
             while i < lines.size
                 if lines[i].strip == DocBlock[0] && !doc_block
-                    puts("begin : #{i + 1}")
                     doc_block = true
                 elsif lines[i].strip == DocBlock[1] && doc_block
-                    puts("end : #{i + 1}")
                     doc_block = false
                 end
 

@@ -12,15 +12,9 @@ class Generator
     end
 
     def make_yml(doc_name, src_dir = "")
-        if !Dir.exist?(@docs_path)
-            Dir.mkdir(@docs_path)
-        end
-
+        Dir.mkdir(@docs_path) if !Dir.exist?(@docs_path)
         doc_path = @docs_path + doc_name
-        if !Dir.exist?(doc_path)
-            Dir.mkdir(doc_path)
-        end
-        Dir.chdir(doc_path)
+        Dir.mkdir(doc_path) if !Dir.exist?(doc_path)
 
         @parser.lexer.ark_path = src_dir if src_dir != ""
         @parser.parse
@@ -29,10 +23,10 @@ class Generator
         yml = File.open("mkdocs.yml", 'w')
 
         # yaml config file writing
-        ## define site name
+        # define site name
         yml.write("site_name: ")
         yml.write(doc_name + NewLine)
-        ## add pages
+        # add pages
         yml.write("nav:")
         yml.write(NewLine)
         labels.each { |label|
@@ -44,35 +38,35 @@ class Generator
             yml.write(NewLine)
         }
 
-        ## end of write config file
+        # end of write config file
         yml.close
+
+        return doc_path
     end
 
-    def make_md
-        md_dir = "docs/"
+    def make_md(doc_name)
+        md_dir = "docs/" + doc_name + '/' + "docs/"
 
         if !Dir.exist?(md_dir)
             Dir.mkdir(md_dir)
-            Dir.chdir(md_dir)
         else
-            Dir.chdir(md_dir)
-            old = Dir.glob("./*.md")
+            old = Dir.glob(md_dir + "/*.md")
             old.each { |e|
                 File.delete(e)
             }
         end
 
         for file in @parser.parsed.keys
-            md = File.open(file + ".md", 'w')
+            md = File.open(md_dir + file + ".md", 'w')
             md << @parser.parsed[file]
             md.close
         end
     end
 
     def generate(site_name, source_path = "")
-        puts("INFO  -  Constructing of the website for documentation")
+        path_to_doc = make_yml(site_name, source_path)
+        make_md(site_name)
 
-        make_yml(site_name, source_path)
-        make_md
+        return path_to_doc
     end
 end
