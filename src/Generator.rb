@@ -16,11 +16,12 @@ class Generator
         doc_path = @docs_path + doc_name
         Dir.mkdir(doc_path) if !Dir.exist?(doc_path)
 
+        puts(doc_path)
         @parser.lexer.ark_path = src_dir if src_dir != ""
         @parser.parse
         labels = @parser.parsed.keys
 
-        yml = File.open("mkdocs.yml", 'w')
+        yml = File.open(doc_path + '/' + "mkdocs.yml", 'w')
 
         # yaml config file writing
         # define site name
