@@ -20,9 +20,7 @@ class Lexer
     end
 
     def tokenize
-        files_paths = Dir.new(@ark_path)
-
-        files_paths.each_child do |file_path|
+        Dir.children(@ark_path).each do |file_path|
             lines = file_ary(File.open(@ark_path + file_path, 'r'))
             file = {}.compare_by_identity
             i = 0
@@ -92,10 +90,8 @@ class Lexer
 
             end
 
-            @tokens << file
+            @tokens << file if !file.empty?
         end
-
-        rm_empty
     end
 
     private
@@ -121,16 +117,5 @@ class Lexer
         end
 
         return nil
-    end
-
-    def rm_empty
-        tmp = []
-
-        @tokens.each do |e|
-            next if e == {}
-            tmp << e
-        end
-
-        @tokens = tmp
     end
 end
