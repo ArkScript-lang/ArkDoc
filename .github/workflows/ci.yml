@@ -23,5 +23,5 @@ jobs:
     - name: Set up Ruby ${{ matrix.ruby-version }}
       uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
       with:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: ["ruby-version"]
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         ruby-version: ${{ matrix.ruby-version }}
