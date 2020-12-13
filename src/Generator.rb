@@ -11,12 +11,28 @@ class Generator
         @docs_path = "docs/"
     end
 
+    def index(doc_name, md_dir)
+        index_md = File.open( md_dir + "index.md", 'w')
+
+        index_md.write("# #{doc_name}")
+        index_md.write(NewLine)
+        index_md.write("##")
+        index_md.write("Pages")
+        @parser.parsed.keys.each { |key|
+            index_md.write(NewLine)
+            index_md.write(Page + "[#{key}]" + "(#{key}.md)")
+            index_md.write("")
+            index_md.write(NewLine)
+        }
+
+        index_md.close
+    #end
+
     def make_yml(doc_name, src_dir = "")
         Dir.mkdir(@docs_path) if !Dir.exist?(@docs_path)
         doc_path = @docs_path + doc_name
         Dir.mkdir(doc_path) if !Dir.exist?(doc_path)
 
-        puts(doc_path)
         @parser.lexer.ark_path = src_dir if src_dir != ""
         @parser.parse
         labels = @parser.parsed.keys
