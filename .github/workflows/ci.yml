@@ -26,5 +26,3 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
 
     - name: Test
-      run: |
-      ruby ArkDoc.rb -h
