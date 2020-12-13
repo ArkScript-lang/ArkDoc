@@ -14,3 +14,13 @@ Details = "_"
 
 # generator
 Each = '-'
+Separator = ' '
+Page = "#### "
+
+# theming
+ThemeMarkup = "theme:"
+ThemeNameMarkup = "name:"
+ThemeDirMarkup = "custom_dir:"
+ThemeDir = "../../themes/"
+# default themes
+DarkTheme = "dark"

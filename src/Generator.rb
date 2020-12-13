@@ -26,7 +26,7 @@ class Generator
         }
 
         index_md.close
-    #end
+    end
 
     def make_yml(doc_name, src_dir = "")
         Dir.mkdir(@docs_path) if !Dir.exist?(@docs_path)
@@ -46,14 +46,39 @@ class Generator
         # add pages
         yml.write("nav:")
         yml.write(NewLine)
+
+        # home page
+        yml.write(Separator)
+        yml.write(Each + Separator)
+        yml.write("Home:")
+        yml.write(Separator)
+        yml.write("index.md")
+        yml.write(NewLine)
+
         labels.each { |label|
-            yml.write(' ')
-            yml.write(Each + ' ')
+            yml.write(Separator)
+            yml.write(Each + Separator)
             yml.write(label.capitalize + ':')
-            yml.write(' ')
+            yml.write(Separator)
             yml.write(label + ".md")
             yml.write(NewLine)
         }
+
+        # theming
+        yml.write(ThemeMarkup)
+        yml.write(NewLine)
+        yml.write(Separator)
+        yml.write(Separator)
+        yml.write(ThemeNameMarkup)
+        yml.write(Separator)
+        yml.write("null")
+        yml.write(NewLine)
+        yml.write(Separator)
+        yml.write(Separator)
+        yml.write(ThemeDirMarkup)
+        yml.write(Separator)
+        yml.write(ThemeDir)
+        yml.write(DarkTheme)
 
         # end of write config file
         yml.close
@@ -73,6 +98,8 @@ class Generator
             }
         end
 
+        # home page
+        index(doc_name, md_dir)
         for file in @parser.parsed.keys
             md = File.open(md_dir + file + ".md", 'w')
             md << @parser.parsed[file]
