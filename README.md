@@ -4,6 +4,7 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 
 ![licence](https://img.shields.io/badge/licence-MPL%202.0-2)
 ![code size](https://img.shields.io/github/languages/code-size/ArkScript-lang/ArkDoc)
+![Ruby CI](https://github.com/ArkScript-lang/ArkDoc/workflows/Ruby%20CI/badge.svg)
 
 ## Dependencies
 
