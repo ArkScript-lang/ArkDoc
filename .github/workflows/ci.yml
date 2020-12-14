@@ -14,11 +14,13 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu", "macos"]
-        ruby-version: [2.7.2, 2.6.1, 2.5.1]
+        ruby-version: [2.7.0, 2.6.0, 2.5.1]
 
     steps:
 
     - uses: actions/checkout@v2
+
+    - uses: actions/setup-ruby@v1
 
     - name: Set up Ruby ${{ matrix.ruby-version }}
       uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
