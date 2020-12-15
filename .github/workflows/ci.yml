@@ -24,3 +24,6 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby-version }}
+
+    - name: Test help
+      run: ruby ArkDoc.rb -h
