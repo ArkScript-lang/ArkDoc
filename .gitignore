@@ -1,6 +1,2 @@
-#files
-*.ark
-
-# folders
 docs/
-ark/
+source/
