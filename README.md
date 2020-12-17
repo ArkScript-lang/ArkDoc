@@ -27,7 +27,7 @@ It's a **Lite** documentation generator for arkscript based on Mkdocs, and writt
 DESCRIPTION
       	Lite documentation generator based on Mkdocs
 
-SYPNOSIS
+SYNOPSIS
         ruby ArkDoc.rb -h
         ruby ArkDoc.rb -v
         ruby ArkDoc.rb -g <site name> [-s <source path>]
