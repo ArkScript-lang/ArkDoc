@@ -1,4 +1,4 @@
-name: Ruby CI
+name: Ruby
 
 on:
   push:
@@ -27,3 +27,9 @@ jobs:
 
     - name: Test help
       run: ruby ArkDoc.rb -h
+
+    - name: Test generate
+      run: |
+        mkdir source
+        cp examples/String.ark source/String.ark
+        ruby ArkDoc.rb -md "ArkScript"
