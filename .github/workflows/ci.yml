@@ -26,9 +26,11 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
 
     - name: Test help
+      shell: bash
       run: ruby ArkDoc.rb -h
 
     - name: Test generate
+      shell: bash
       run: |
         mkdir source
         cp examples/String.ark source/String.ark
