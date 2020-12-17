@@ -109,7 +109,9 @@ class Generator
 
     def generate(site_name, source_path = "")
         path_to_doc = make_yml(site_name, source_path)
+        puts("ArkDoc - Generation of configuration file")
         make_md(site_name)
+        puts("ArkDoc - Generation of Markdown files")
 
         return path_to_doc
     end
