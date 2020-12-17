@@ -31,5 +31,5 @@ jobs:
     - name: Test generate
       run: |
         mkdir source
-        cp examples/String.ark source/String.ark
+        cp examples/String.ark source/
         ruby ArkDoc.rb -md "ArkScript"
