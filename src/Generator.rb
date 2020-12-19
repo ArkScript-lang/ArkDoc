@@ -65,17 +65,17 @@ class Generator
         }
 
         # theming
-        yml.write(ThemeMarkup)
+        yml.write(ThemeTag)
         yml.write(NewLine)
         yml.write(Separator)
         yml.write(Separator)
-        yml.write(ThemeNameMarkup)
+        yml.write(ThemeNameTag)
         yml.write(Separator)
         yml.write("null")
         yml.write(NewLine)
         yml.write(Separator)
         yml.write(Separator)
-        yml.write(ThemeDirMarkup)
+        yml.write(ThemeDirTag)
         yml.write(Separator)
         yml.write(ThemeDir)
         yml.write(DarkTheme)

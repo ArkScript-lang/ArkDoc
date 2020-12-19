@@ -18,9 +18,9 @@ Separator = ' '
 Page = "#### "
 
 # theming
-ThemeMarkup = "theme:"
-ThemeNameMarkup = "name:"
-ThemeDirMarkup = "custom_dir:"
+ThemeTag = "theme:"
+ThemeNameTag = "name:"
+ThemeDirTag = "custom_dir:"
 ThemeDir = "../../themes/"
 # default themes
 DarkTheme = "dark"
