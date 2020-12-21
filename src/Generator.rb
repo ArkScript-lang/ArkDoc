@@ -34,7 +34,7 @@ class Generator
 
         @parser.lexer.ark_path = src_dir if src_dir != ""
         @parser.parse
-        labels = @parser.parsed.keys
+        labels = @parser.parsed.keys.sort
 
         yml = File.open(doc_path + '/' + "mkdocs.yml", 'w')
 
