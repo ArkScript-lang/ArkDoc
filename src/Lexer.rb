@@ -49,7 +49,7 @@ class Lexer
                     end
 
                     if code
-                        code_str << lines[i].refine if !lines[i].include?(Code[0])
+                        code_str << lines[i].delete_prefix("# ") if !lines[i].include?(Code[0])
                         i += 1
                         next
                     end
