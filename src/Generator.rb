@@ -16,11 +16,10 @@ class Generator
 
         index_md.write("# #{doc_name}")
         index_md.write(NewLine)
-        index_md.write("##")
-        index_md.write("Pages")
-        @parser.parsed.keys.each { |key|
+        index_md.write(NewLine)
+        @parser.parsed.keys.sort.each { |key|
             index_md.write(NewLine)
-            index_md.write(Page + "[#{key}]" + "(#{key}.md)")
+            index_md.write(Page + "[#{key.capitalize}]" + "(#{key}.md)")
             index_md.write("")
             index_md.write(NewLine)
         }

@@ -15,7 +15,7 @@ Details = "_"
 # generator
 Each = '-'
 Separator = ' '
-Page = "#### "
+Page = "##### "
 
 # theming
 ThemeTag = "theme:"
