@@ -15,5 +15,5 @@ class HTMLGenerator(Generator):
 
     def _generate(self, path: str, functions: List[spec.Function]):
         # TODO
-        logger.info(path, pformat(functions, indent = 4))
+        logger.info(path, pformat(functions, indent=4))
         return None

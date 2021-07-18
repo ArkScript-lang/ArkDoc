@@ -39,37 +39,26 @@ def compute(args) -> bool:
             gen = HTMLGenerator(parsers)
             gen()
         else:
-            logger.error('Missing generator!')
+            logger.error("Missing generator!")
             return False
 
     return True
 
 
 def main() -> int:
-    cli = argparse.ArgumentParser(
-        description='ArkScript Documentation generator'
+    cli = argparse.ArgumentParser(description="ArkScript Documentation generator")
+    cli.add_argument(
+        "source_folder", type=str, help="Path to the ArkScript source folder"
     )
     cli.add_argument(
-        'source_folder',
-        type=str,
-        help='Path to the ArkScript source folder'
+        "--builtins", type=str, help="Path to the builtins folder", default=None
     )
     cli.add_argument(
-        '--builtins',
-        type=str,
-        help='Path to the builtins folder',
-        default=None
+        "--dry-run",
+        action="store_true",
+        help="Run and log everything but don't generate any file",
     )
-    cli.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Run and log everything but don\'t generate any file'
-    )
-    cli.add_argument(
-        '--html',
-        action='store_true',
-        help='Generate HTML documentation'
-    )
+    cli.add_argument("--html", action="store_true", help="Generate HTML documentation")
 
     args = cli.parse_args()
 
@@ -79,5 +68,5 @@ def main() -> int:
         return EXIT_FAILURE
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
