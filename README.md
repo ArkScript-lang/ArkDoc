@@ -12,7 +12,11 @@ A documentation generator for ArkScript.
 ## Usage
 
 ```bash
-~$ git clone https://github.com/ArkScript-lang/ArkDoc.git
+git clone https://github.com/ArkScript-lang/ArkDoc.git
+python3 -m venv venv
+source ./venv/bin/activate
+pip3 install -r requirements.txt
+python3 -m arkdoc --help
 ```
 
 ## Syntax
