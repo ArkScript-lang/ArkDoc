@@ -2,3 +2,4 @@
 *.arkc
 *.py[ouc]
 __pycache__/
+venv/
