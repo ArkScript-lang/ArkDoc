@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 
-from . import specification
+from typing import List
 
+from . import specification as spec
+from . import Generator
 from .. import logger
+from ..parser import Parser
 
 
-class CodeToHTML:
-    def __init__(self, list: specification.FileList):
-        self.list = list
-        self.template = (specification.TEMPLATE_FOLDER / "temp.html").read_text('utf-8')
+class HTMLGenerator(Generator):
+    def __init__(self, parser: Parser):
+        super().__init__(parser, spec.HTML_TEMPLATE_FOLDER / "temp.html")
 
-    def generate(self):
-        for file in self.list.files:
-            logger.info(f"Generating {file.path} documentation...")
-            logger.info(f"Found {len(file.functions)} functions")
-
-            for func in file.functions:
-                logger.debug(func)
+    def _generate(self, path: str, functions: List[spec.Function]):
+        logger.debug(path, functions)
+        return None
