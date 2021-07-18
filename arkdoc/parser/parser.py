@@ -2,7 +2,6 @@
 
 import re
 from typing import List, NamedTuple
-from collections import OrderedDict
 
 from .. import logger
 
@@ -22,7 +21,8 @@ TokenSpecification = [
     ('NUMBER', r'\d+(\.\d*)?'),
     ('STRING', r'"[^"]*"'),
     ('ID', r'[\w:?=!@&<>+\-%*/.]+'),
-    ('PARENS', r'[()\[\]{}]'), 
+    ('LPAREN', r'[(\[{]'),
+    ('RPAREN', r'[)\]}]'),
     ('COMMENT', r'#[^\n]*'),
     ('NEWLINE', r'\n'),
     ('SKIP', r'[ \t]+'),
@@ -60,16 +60,46 @@ def tokenize(code: str) -> List[Token]:
         yield Token(kind, value, line_num, column)
 
 
+
+def tree_from_tokens(tokens: List[Token]) -> List:
+    if len(tokens) == 0:
+        raise SyntaxError('unexpected EOF')
+
+    token = tokens.pop(0)
+
+    L = []
+    while token.type == 'COMMENT':
+        L.append(token)
+        token = tokens.pop(0)
+
+    if token.type == 'LPAREN':
+        L2 = []
+        while tokens[0].type != 'RPAREN':
+            L2.append(tree_from_tokens(tokens))
+        tokens.pop(0)
+        L.append(L2)
+        return L
+    elif token.type == 'RPAREN':
+        raise SyntaxError(f"unexpected ) on line {token.line}, at {token.column}")
+    else:
+        return token
+
+
 class Parser:
     def __init__(self, filename: str):
         self.filename = filename
         self.ast = None
 
+    def visit(self, node: List, depth: int = 0):
+        for n in node:
+            if not isinstance(n, list):
+                logger.debug(depth * " ", n)
+            else:
+                self.visit(n, depth + 1)
+
     def parse(self):
         with open(self.filename, 'r') as f:
             program = f.read()
 
-        self.ast = []
-        for token in tokenize(program):
-            self.ast.append(token)
-        logger.debug(*self.ast)
+        self.ast = tree_from_tokens(list(tokenize(program)))
+        self.visit(self.ast)
