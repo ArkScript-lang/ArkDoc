@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-TEMPLATE_FOLDER = Path("templates")
+HTML_TEMPLATE_FOLDER = Path("templates")
 
 @dataclass
 class Param:
