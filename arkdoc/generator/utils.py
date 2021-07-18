@@ -41,12 +41,14 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
         param_name, desc = param.split(" ", 1)
         data["param"][i] = spec.Param(param_name, desc)
 
+    data["author"] = [el.strip() for el in data["author"].split(",")]
+
     return data, "\n".join(code)
 
 
 def from_ark(doc: Documentation) -> spec.Function:
     _, name, *args = doc.signature()
-    data, code = extractor({"brief": "", "details": "", "param": [], "author": []}, doc)
+    data, code = extractor({"brief": "", "details": "", "param": [], "author": ""}, doc)
 
     if len(data["param"]) != len(args):
         logger.warn(
@@ -65,7 +67,7 @@ def from_ark(doc: Documentation) -> spec.Function:
 
 def from_cpp(doc: Documentation) -> spec.Function:
     data, code = extractor(
-        {"name": "", "brief": "", "details": "", "param": [], "author": []}, doc
+        {"name": "", "brief": "", "details": "", "param": [], "author": ""}, doc
     )
 
     return spec.Function(
