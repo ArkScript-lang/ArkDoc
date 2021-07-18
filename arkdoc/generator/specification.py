@@ -2,7 +2,10 @@
 
 from typing import List
 from dataclasses import dataclass
+from pathlib import Path
 
+
+TEMPLATE_FOLDER = Path("templates")
 
 @dataclass
 class Param:
@@ -25,13 +28,10 @@ class Function:
     desc: Description
 
 
+@dataclass
 class File:
-    def __init__(self, path: str):
-        assert(
-            path.endswith('.ark'),
-            f"{path} isn't an ArkScript source file"
-        )
-        self.path = path
+    path: str
+    functions: List[Function]
 
 
 @dataclass
