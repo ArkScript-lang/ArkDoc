@@ -1,0 +1,35 @@
+name: Tests CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkout std
+        uses: actions/checkout@v2
+        with:
+          repository: ArkScript-lang/std
+          path: './std-latest'
+
+      - name: Checkout Ark
+        uses: actions/checkout@v2
+        with:
+          repository: ArkScript-lang/Ark
+          path: './ark-latest'
+
+      - name: Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - run: pip install -r requirements.txt
+      - run: python -m arkdoc std-latest/ --builtins ark-latest/src/Builtins --dry-run || exit 1
