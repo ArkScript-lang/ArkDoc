@@ -1,2 +1,4 @@
-docs/
-source/
+*.ark
+*.arkc
+*.py[ouc]
+__pycache__/
