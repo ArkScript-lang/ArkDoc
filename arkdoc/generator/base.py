@@ -12,7 +12,7 @@ from ..parser import Parser
 
 class Generator:
     def __init__(self, parsers: List[Parser], template: Path):
-        self.template = template.read_text('utf-8')
+        self.template = template.read_text("utf-8")
         self.list = spec.FileList([])
 
         registered = {}

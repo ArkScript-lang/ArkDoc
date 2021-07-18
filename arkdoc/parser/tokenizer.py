@@ -13,66 +13,65 @@ class Token:
     column: int
 
     def __str__(self):
-        return f"Token({self.type}, '{self.value}', line={self.line}, col={self.column})"
+        return (
+            f"Token({self.type}, '{self.value}', line={self.line}, col={self.column})"
+        )
 
 
 Keywords = "let mut set del fun if while import begin quote".split()
 TokenSpecification = [
-    ('NUMBER', r'\d+(\.\d*)?'),
-    ('STRING', r'"[^"]*"'),
-    ('ID', r'[\w:?=!@&<>+\-%*/.]+'),
-    ('LPAREN', r'[(\[{]'),
-    ('RPAREN', r'[)\]}]'),
-    ('COMMENT', r'#[^\n]*'),
-    ('NEWLINE', r'\n'),
-    ('SKIP', r'[ \t]+'),
-    ('MISMATCH', r'.'),
+    ("NUMBER", r"\d+(\.\d*)?"),
+    ("STRING", r"\"[^\"]*\""),
+    ("ID", r"[\w:?=!@&<>+\-%*/.]+"),
+    ("LPAREN", r"[(\[{]"),
+    ("RPAREN", r"[)\]}]"),
+    ("COMMENT", r"#[^\n]*"),
+    ("NEWLINE", r"\n"),
+    ("SKIP", r"[ \t]+"),
+    ("MISMATCH", r"."),
 ]
 
 
 def tokenize(code: str) -> List[Token]:
-    tok_regex = '|'.join(
-        '(?P<%s>%s)' %
-        pair for pair in TokenSpecification
-    )
+    tok_regex = "|".join("(?P<%s>%s)" % pair for pair in TokenSpecification)
     line_num = 1
     line_start = 0
 
-    lines = code.split('\n')
+    lines = code.split("\n")
 
     for mo in re.finditer(tok_regex, code):
         kind = mo.lastgroup
         value = mo.group()
         column = mo.start() - line_start
 
-        if kind == 'ID' and value in Keywords:
+        if kind == "ID" and value in Keywords:
             kind = value
-        elif kind == 'NEWLINE':
+        elif kind == "NEWLINE":
             line_start = mo.end()
             line_num += 1
             continue
-        elif kind == 'SKIP':
+        elif kind == "SKIP":
             continue
-        elif kind == 'MISMATCH':
+        elif kind == "MISMATCH":
             raise RuntimeError(
-                f'{value!r} unexpected on line {line_num}\n{lines[line_num - 1]}'
+                f"{value!r} unexpected on line {line_num}\n{lines[line_num - 1]}"
             )
         yield Token(kind, value, line_num, column)
 
 
 def cpp_tokenize(code: str) -> List[str]:
-    tok_regex = r'^ */\*\*\n( *\* *@.+\n)+ *\*/'
+    tok_regex = r"^ */\*\*\n( *\* *@.+\n)+ *\*/"
     line_num = 1
     line_start = 0
 
     def transform(line: str):
         nonlocal line_num
-        lines = line.split('\n')
+        lines = line.split("\n")
 
         for e in lines[1:-1]:
-            line = '#' + e.strip()[1:]
+            line = "#" + e.strip()[1:]
             line_num += 1
-            yield Token('COMMENT', line, line_num, column)
+            yield Token("COMMENT", line, line_num, column)
 
     for mo in re.finditer(tok_regex, code, flags=re.MULTILINE):
         value = mo.group()
@@ -82,25 +81,23 @@ def cpp_tokenize(code: str) -> List[str]:
 
 def tree_from_tokens(tokens: List[Token]) -> List:
     if len(tokens) == 0:
-        raise SyntaxError('unexpected EOF')
+        raise SyntaxError("unexpected EOF")
 
     token = tokens.pop(0)
 
     L = []
-    while token.type == 'COMMENT':
+    while token.type == "COMMENT":
         L.append(token)
         token = tokens.pop(0)
 
-    if token.type == 'LPAREN':
+    if token.type == "LPAREN":
         L2 = []
-        while tokens[0].type != 'RPAREN':
+        while tokens[0].type != "RPAREN":
             L2.append(tree_from_tokens(tokens))
         tokens.pop(0)
         L.append(L2)
         return L
-    elif token.type == 'RPAREN':
-        raise SyntaxError(
-            f"unexpected ) on line {token.line}, at {token.column}"
-        )
+    elif token.type == "RPAREN":
+        raise SyntaxError(f"unexpected ) on line {token.line}, at {token.column}")
     else:
         return token

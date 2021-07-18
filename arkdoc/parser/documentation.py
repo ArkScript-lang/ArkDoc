@@ -9,8 +9,11 @@ from .tokenizer import Token
 
 
 def deep_flatten(lst):
-    return ([a for i in lst for a in
-             deep_flatten(i)] if isinstance(lst, Iterable) else [lst])
+    return (
+        [a for i in lst for a in deep_flatten(i)]
+        if isinstance(lst, Iterable)
+        else [lst]
+    )
 
 
 class Source(Enum):
@@ -28,13 +31,13 @@ class Documentation:
         return token.value
 
     def signature(self, on: List[Token] = None):
-        def transform(L): return list(
-            map(lambda t: t.value, deep_flatten(L)))
+        def transform(L):
+            return list(map(lambda t: t.value, deep_flatten(L)))
+
         top = self.target[:] if on is None else on
 
         while True:
-            if isinstance(top, list) and \
-                    len(top) and isinstance(top[0], list):
+            if isinstance(top, list) and len(top) and isinstance(top[0], list):
                 top = top[0]
             else:
                 break
