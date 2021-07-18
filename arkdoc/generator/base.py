@@ -27,6 +27,6 @@ class Generator:
     def __call__(self):
         for file in self.list.files:
             logger.info(f"Generating {file.path} documentation...")
-            logger.info(f"Found {len(file.functions)} functions")
+            logger.info(f"\tFound {len(file.functions)} functions")
 
             self._generate(file.path, file.functions)

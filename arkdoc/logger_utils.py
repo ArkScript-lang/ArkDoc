@@ -52,4 +52,3 @@ class Logger:
 
 
 colorama.init()
-logger = Logger('ArkDoc', level=LogLevel.DEBUG)
