@@ -25,6 +25,7 @@ class Description:
 @dataclass
 class Function:
     name: str
+    signature: str
     desc: Description
 
 

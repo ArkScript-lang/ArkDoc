@@ -4,6 +4,7 @@ import re
 
 from . import specification as spec
 from ..parser import Documentation
+from .. import logger
 
 
 def documentation_to_specification(doc: Documentation) -> spec.Function:
@@ -12,7 +13,7 @@ def documentation_to_specification(doc: Documentation) -> spec.Function:
     data = {
         'brief': '',
         'details': '',
-        'params': [],
+        'param': [],
         'code': '',
         'author': []
     }
@@ -21,30 +22,31 @@ def documentation_to_specification(doc: Documentation) -> spec.Function:
         for key in data:
             tag = f"@{key}"
 
-            if tag in comment:
-                res = re.sub(fr'#+ *{tag}', '', comment).strip()
+            if tag in comment.value:
+                res = re.sub(fr'#+ *{tag}', '', comment.value).strip()
 
                 if isinstance(data[key], list):
                     data[key].append(res)
                 else:
                     data[key] = res
 
-    if len(data['params']) != len(args):
-        raise ValueError(
+    if len(data['param']) != len(args):
+        logger.warn(
             f"Function {name} was defined with {len(args)} arguments, "
-            f"but only {len(data['params'])} are documented"
+            f"but only {len(data['param'])} are documented"
         )
 
-    for i, param in enumerate(data['params']):
+    for i, param in enumerate(data['param']):
         param_name, desc = param.split(' ', 1)
-        data['params'][i] = spec.Param(param_name, desc)
+        data['param'][i] = spec.Param(param_name, desc)
 
     return spec.Function(
         name,
+        doc.pretty_signature,
         spec.Description(
             data["brief"],
             data["details"],
-            data["params"],
+            data["param"],
             data["code"],
             data["author"]
         )

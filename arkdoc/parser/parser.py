@@ -5,6 +5,7 @@ from typing import List
 
 from . import Documentation
 from .tokenizer import tree_from_tokens, tokenize, Token
+from .. import logger
 
 
 class Parser:
@@ -24,7 +25,8 @@ class Parser:
             if not isinstance(n, list):
                 if self._is_doc_comment(n):
                     comments = [
-                        n] if comments is None else comments + [n]
+                        n
+                    ] if comments is None else comments + [n]
             else:
                 if comments is None:
                     yield from self._doc_extractor(n)
@@ -34,7 +36,9 @@ class Parser:
                     yield from self._doc_extractor(n)
 
     def extract_documentation(self):
-        yield from self._doc_extractor(self.ast)
+        for doc in self._doc_extractor(self.ast):
+            logger.debug(doc)
+            yield doc
 
     def parse(self):
         with open(self.filename, 'r') as f:
