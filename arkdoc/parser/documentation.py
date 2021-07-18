@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from collections.abc import Iterable
 from typing import List
+from enum import Enum
 
 from .tokenizer import Token
 
@@ -12,8 +13,14 @@ def deep_flatten(lst):
              deep_flatten(i)] if isinstance(lst, Iterable) else [lst])
 
 
+class Source(Enum):
+    ArkScript = 0
+    Cpp = 1
+
+
 @dataclass
 class Documentation:
+    source: Source
     comments: List[Token]
     target: List
 

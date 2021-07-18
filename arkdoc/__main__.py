@@ -25,6 +25,8 @@ def compute(args) -> bool:
         logger.level = LogLevel.DEBUG
 
     parsers = parse_all_in(args.source_folder)
+    if args.builtins:
+        parsers += parse_all_in(args.builtins)
     for p in parsers:
         logger.info(f"Parsing {p.filename}...")
         p.parse()
@@ -51,6 +53,12 @@ def main() -> int:
         'source_folder',
         type=str,
         help='Path to the ArkScript source folder'
+    )
+    cli.add_argument(
+        '--builtins',
+        type=str,
+        help='Path to the builtins folder',
+        default=None
     )
     cli.add_argument(
         '--dry-run',
