@@ -1,0 +1,41 @@
+name: super-linter
+
+on:
+  push:
+    branches: *
+  pull_request:
+    branches: *
+
+jobs:
+  build:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+
+      ################################
+      # Run Linter against code base #
+      ################################
+      - name: Lint Code Base
+        uses: docker://github/super-linter:v3.13.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
+          VALIDATE_CSS: true
+          VALIDATE_DOCKERFILE: true
+          VALIDATE_DOCKERFILE_HADOLINT: true
+          VALIDATE_ENV: true
+          VALIDATE_HTML: true
+          VALIDATE_JSON: true
+          VALIDATE_LATEX: true
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_POWERSHELL: true
+          VALIDATE_SHELL_SHFMT: true
+          VALIDATE_SQL: true
