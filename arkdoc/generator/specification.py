@@ -7,6 +7,7 @@ from pathlib import Path
 
 HTML_TEMPLATE_FOLDER = Path("templates")
 
+
 @dataclass
 class Param:
     name: str

@@ -7,7 +7,8 @@ from .parser import Parser
 
 
 def explore(folder: str) -> List[str]:
-    return glob.glob(f"{folder}/*.ark", recursive=True)
+    for ext in ['ark', 'cpp']:
+        yield from glob.glob(f"{folder}/*.{ext}", recursive=True)
 
 
 def parse_all_in(folder: str) -> List[Parser]:
