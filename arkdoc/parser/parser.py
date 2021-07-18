@@ -56,13 +56,6 @@ class Parser:
         self.filename = filename
         self.ast = None
 
-    def visit(self, node: List, depth: int = 0):
-        for n in node:
-            if not isinstance(n, list):
-                logger.debug(depth * " ", n)
-            else:
-                self.visit(n, depth + 1)
-
     def _is_doc_comment(self, token: Token) -> bool:
         return token.type == 'COMMENT' and re.match(
             r'^#+ *@\w+', token.value
@@ -95,7 +88,3 @@ class Parser:
 
         while tokens:
             self.ast += tree_from_tokens(tokens)
-        # self.visit(self.ast)
-
-        for e in self.extract_documentation():
-            logger.debug(e)
