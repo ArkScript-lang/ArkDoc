@@ -19,18 +19,23 @@ class Logger:
         self.level = level
 
     def _print(self, kind: LogLevel, *args):
-        if kind.value > self.level.value:
-            return
-
         colors = {
             LogLevel.DEBUG: colorama.Fore.MAGENTA,
             LogLevel.INFO: colorama.Fore.CYAN,
             LogLevel.WARN: colorama.Fore.YELLOW,
             LogLevel.ERROR: colorama.Fore.RED
         }
+
+        if kind.value > self.level.value:
+            return
+
+        prefix = f"[{colors[kind]}{kind.name:^5}{colorama.Fore.RESET}]"
         now = datetime.now().isoformat(timespec='minutes')
+        colored_now = f"{colorama.Fore.MAGENTA}{now}{colorama.Fore.RESET}"
+        rest = ' '.join(str(el) for el in args)
+
         print(
-            f"[{colors[kind]}{kind.name:^5}{colorama.Fore.RESET}] -- {now} -- {' '.join(args)}"
+            f"{prefix} -- {colored_now} -- {rest}"
         )
 
     def debug(self, *args):
