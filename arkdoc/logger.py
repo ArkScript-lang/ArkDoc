@@ -29,7 +29,9 @@ class Logger:
             LogLevel.ERROR: colorama.Fore.RED
         }
         now = datetime.now().isoformat(timespec='minutes')
-        print(f"[${colors[kind]}{kind.name}{colorama.Fore.RESET}] -- {now} -- {' '.join(args)}")
+        print(
+            f"[${colors[kind]}{kind.name}{colorama.Fore.RESET}] -- {now} -- {' '.join(args)}"
+        )
 
     def debug(self, *args):
         self._print(LogLevel.DEBUG, *args)
