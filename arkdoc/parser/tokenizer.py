@@ -60,7 +60,20 @@ def tokenize(code: str) -> List[Token]:
 
 
 def cpp_tokenize(code: str) -> List[str]:
-    tok_regex = r"^ */\*\*\n( *\* *@.+\n)+ *\*/"
+    """
+    The following regex accepts this kind of comment
+
+    /**
+      * test 
+     * test
+    * test
+      * @meta test
+    test
+     test
+      test
+    */
+    """
+    tok_regex = r"^ */\*\*\n(@?.*\n)+ *\*/"
     line_num = 1
     line_start = 0
 
