@@ -31,7 +31,6 @@ python3 -m arkdoc --help
 ## Example
 
 ```lisp
-# @meta List
 # @brief Iterate over a given list and run a given function on every element.
 # @param _L the list to iterate over
 # @param _func the function to call on each element
