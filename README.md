@@ -21,12 +21,12 @@ python3 -m arkdoc --help
 
 ## Syntax
 
-- `@meta <name>`
-- `@brief <description>`
-- `@param <name> <description>`
-- `@details <description>`
-- `=begin` / code block / `=end`
-- `@author <url>,<url>,...`
+- `@brief <description>`: a single brief declaration is expected
+- `@param <name> <description>`: multiple `@param` declaration can be written
+- `@details <description>`: a single detailled declaration is expected
+- `=begin` / code block / `=end`: a single code block (it can contain multiple lines) is expected
+- `@author <url>,<url>,...`: the url to the profiles of the authors must be separated by commas, spaces can be added
+- any line not starting with a `@<keyword>` will be ignored, unless it is enclosed in a `=begin`/`=end` bloc
 
 ## Example
 
