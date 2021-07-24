@@ -36,7 +36,7 @@ def compute(args) -> bool:
 
     if not args.dry_run:
         if args.html:
-            gen = HTMLGenerator(parsers)
+            gen = HTMLGenerator(parsers, args.html)
             gen()
         else:
             logger.error("Missing generator!")
@@ -58,7 +58,7 @@ def main() -> int:
         action="store_true",
         help="Run and log everything but don't generate any file",
     )
-    cli.add_argument("--html", action="store_true", help="Generate HTML documentation")
+    cli.add_argument("--html", type=str, help="Output folder for the HTML docs")
 
     args = cli.parse_args()
 
