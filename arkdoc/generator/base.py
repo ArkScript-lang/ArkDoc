@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import shutil
 import os
 from typing import List
 from pathlib import Path
@@ -11,12 +12,15 @@ from ..parser import Parser
 
 
 class Generator:
-    def __init__(self, parsers: List[Parser], template_folder: Path, pattern: str):
+    def __init__(self, parsers: List[Parser], template_folder: Path, pattern: str, output: str, ark_version: str):
         self.template_folder = template_folder
         self.templates = {
             file.name: file.read_text("utf-8")
             for file in template_folder.glob(pattern)
         }
+        self.version = ark_version
+        self.output_path = Path(output)
+        self.output_path_ver = self.output_path / self.version
         self.list = spec.FileList([])
         self._create_files_list(parsers)
 
@@ -44,6 +48,12 @@ class Generator:
         raise NotImplementedError
 
     def __call__(self):
+        if not self.output_path_ver.exists():
+            self.output_path_ver.mkdir(parents=True)
+        else:
+            shutil.rmtree(str(self.output_path_ver))
+            return self.__call__()
+
         self.generate_index()
 
         for file in self.list.files:

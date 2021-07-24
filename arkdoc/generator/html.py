@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-import re
-from datetime import datetime
 import shutil
+from datetime import datetime
 from typing import List
 from pprint import pformat
 from pathlib import Path
@@ -92,11 +91,7 @@ class html:
 
 class HTMLGenerator(Generator):
     def __init__(self, parsers: List[Parser], output: str, ark_version: str):
-        super().__init__(parsers, spec.HTML_TEMPLATE_FOLDER, "*.html")
-
-        self.version = ark_version
-        self.output_path = Path(output)
-        self.output_path_ver = self.output_path / self.version
+        super().__init__(parsers, spec.HTML_TEMPLATE_FOLDER, "*.html", output, ark_version)
 
         self.footer = f"<i>Last generation at {datetime.now()}</i>"
 
@@ -104,13 +99,8 @@ class HTMLGenerator(Generator):
         (self.output_path / name).mkdir()
 
     def generate_index(self):
-        if not self.output_path_ver.exists():
-            if not (self.template_folder / "assets").exists():
-                shutil.copytree(str(self.template_folder / "assets"), str(self.output_path / "assets"))
-            self.output_path_ver.mkdir()
-        else:
-            shutil.rmtree(str(self.output_path_ver))
-            return self.generate_index()
+        if not (self.output_path / "assets").exists():
+            shutil.copytree(str(self.template_folder / "assets"), str(self.output_path / "assets"))
 
         sections = html.section(
             f"ArkScript {self.version} documentation",
