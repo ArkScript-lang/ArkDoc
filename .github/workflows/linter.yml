@@ -28,11 +28,11 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_BASH: true
           VALIDATE_BASH_EXEC: true
-          VALIDATE_CSS: true
+          VALIDATE_CSS: false
           VALIDATE_DOCKERFILE: true
           VALIDATE_DOCKERFILE_HADOLINT: true
           VALIDATE_ENV: true
-          VALIDATE_HTML: true
+          VALIDATE_HTML: false
           VALIDATE_JSON: true
           VALIDATE_LATEX: true
           VALIDATE_PYTHON_BLACK: true
