@@ -1,0 +1,192 @@
+@import "_vars.sass"
+
+// PAGE STRUCTURE SASS FILE
+// contains header, footer and sidebar styles
+
+
+// NAVBAR/HEADER
+$banner-height: 60vh
+$header-sections-font-size: 0.8rem
+
+header.navbar, #banner
+    padding: 0 4vw
+    width: 100vw
+    height: $header-height
+    background-color: $menus-bg-color
+
+    *
+        margin: 0 10px
+    a
+        font-size: $header-sections-font-size
+
+    img
+        height: $header-height
+
+    .navbar-brand
+        font-size: $header-sections-font-size * 1.4
+        color: darken($btn-link-color, 5%)
+        text-transform: uppercase
+        font-weight: bold
+        line-height: $header-height
+
+    .dropdown
+        margin: 0
+        a
+            border: none
+
+header.navbar:not(.has-banner)
+    height: $header-height * 1.5
+    img, .navbar-center, .navbar-center a, div.dropdown-link
+        height: $header-height * 1.5
+
+
+// BANNER
+#banner
+    height: $banner-height
+    margin-bottom: 25px
+
+    .banner-center
+        display: flex
+        flex-flow: column
+        text-align: center
+
+    img
+        height: $banner-height / 5
+
+
+// SIDEBAR
+.off-canvas .off-canvas-toggle
+    position: fixed
+    top: $header-height * 2
+    left: 15px
+
+#sidebar
+    background: $menus-bg-color
+    max-width: 15vw
+
+    &~.off-canvas-overlay
+        cursor: initial
+
+    .nav .nav-item a
+        color: darken($body-color, 3%)
+        &:hover
+            color: $btn-link-color
+
+// FOOTER
+footer#page-footer
+    bottom: 0
+    width: 100vw
+    min-height: $footer-height
+    background-color: $menus-bg-color
+    padding: 2vh
+
+    p
+        margin: 0
+        padding: 0
+
+
+// DROPDOWN
+.btn.btn-link.dropdown-toggle:focus
+    box-shadow: none
+.menu
+    background-color: $menus-bg-color
+.dropdown .dropdown-toggle:focus+.menu, .dropdown .menu:hover, .dropdown.active .menu
+    display: block !important
+
+
+// Hiding the logo on the index page by default (will show only on click on the menu toggler!)
+.hide
+    display: none
+
+// caret icon modifications
+.dropdown-toggle .icon.icon-caret
+    margin-right: 0
+
+
+
+// RESPONSIVE
+@media screen and (max-width: $break-width)
+    .dropdown-toggle .icon.icon-caret
+        display: none
+
+    header.navbar
+        min-height: 55px
+        &.has-banner
+            #menu-show
+                height: $header-height
+                i
+                    height: $header-height * 1.5
+        padding: 0
+        position: fixed
+        .dropdown
+            display: flex !important
+            align-items: center
+            flex-direction: column
+            .menu, .menu:hover
+                animation: none
+                display: flex !important
+                align-items: inherit
+                flex-direction: inherit
+                position: relative
+                margin-bottom: 20px
+            .dropdown-toggle:focus + .menu
+                display: flex !important
+        #menu-show
+            min-height: 55px
+            i
+                height: $header-height * 1.5
+            padding-top: 0
+            padding-bottom: 0
+            border: 0
+            height: $header-height * 1.5
+            position: fixed
+            top: 0
+            margin-left: 0
+            z-index: 500
+        .logo
+            align-items: initial
+            position: fixed
+            right: 0
+            img
+                min-height: 50px
+        .divider
+            width: 190px
+            height: 1px
+            border-left: none
+            border-top: 1px solid lighten($body-bg-color, 8%)
+
+    // No banner
+    header.navbar:not(.has-banner):focus-within
+        .navbar-section.show-on-focus
+            animation: slide-down ease 0.15s 1
+            padding-top: $header-height
+            background-color: $menus-bg-color
+            left: 0
+            margin: 0
+            width: 100vw
+            display: flex !important
+            align-items: center
+            flex-direction: column
+        .menu
+            position: initial
+
+    // Banner
+    header.navbar.has-banner:focus-within
+        .logo, .logo *
+            animation: slide-left ease 0.15s 1
+            display: block !important
+        .navbar-center
+            animation: slide-down ease 0.15s 1
+            display: flex !important
+            background-color: $menus-bg-color
+            position: fixed
+            top: $header-height
+            left: 0
+            flex-direction: column
+            margin: 0
+            width: 100vw
+
+    // sidebar button behaviour
+    .off-canvas .off-canvas-toggle
+        left: -6px
+        border-bottom-right-radius: 10px
