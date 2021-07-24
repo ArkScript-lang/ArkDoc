@@ -16,6 +16,11 @@ git clone https://github.com/ArkScript-lang/ArkDoc.git
 python3 -m venv venv
 source ./venv/bin/activate
 pip3 install -r requirements.txt
+
+# set the log level
+# if not given, defaults to INFO
+export ARKDOC_LOGLEVEL=DEBUG
+
 python3 -m arkdoc --help
 ```
 
