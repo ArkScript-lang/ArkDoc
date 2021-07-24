@@ -13,33 +13,81 @@ from .. import logger
 from ..parser import Parser
 
 
-def make_nav_link(name: str, path: str) -> str:
+class html:
+    @staticmethod
+    def plural(name: str, qu: int) -> str:
+        return f"{name}{'s' if qu > 1 else ''}"
+
+    @staticmethod
+    def nav_link(name: str, path: str) -> str:
         return f"<a href=\"{path}\" class=\"btn btn-link\">{name}</a>"
 
+    @staticmethod
+    def anchorize(name: str) -> str:
+        return name.lower().replace(" ", "-")
 
-def make_code_block(content: str) -> str:
-    return f"""<pre>
+    @staticmethod
+    def nav_item(name: str, anchor: str) -> str:
+        return f"""<li class="nav-item">
+    <a href="#{anchor}">{name}</a>
+</li>"""
+
+    @staticmethod
+    def a(name: str, path: str) -> str:
+        return f"<a href=\"{path}\">{name}</a>"
+
+    @staticmethod
+    def b(content: str) -> str:
+        return f"<b>{content}</b>"
+
+    @staticmethod
+    def inline_code(content: str) -> str:
+        return f"<code>{content}</code>"
+
+    @staticmethod
+    def code(content: str) -> str:
+        return f"""<pre>
 <code class="rainbowjs" data-language="arkscript">
 {content}
 </code>
 </pre>"""
 
+    @staticmethod
+    def section(title: str, content: str, anchor: str="") -> str:
+        return f"""<section {f'id="{anchor}"' if anchor else ''}>
+    <h2>{title}</h2>
 
-def make_section(title: str, content: str) -> str:
-    return f"""<section id="examples">
-<h2>{title}</h2>
-
-<div class="inner-section">
-    {content}
-</div>
+    <div class="inner-section">
+        {content}
+    </div>
 </section>"""
 
+    @staticmethod
+    def ul(content: List[str]) -> str:
+        out = "<ul>"
+        for el in content:
+            out += f"<li>{el}</li>"
+        return out + "</ul>"
 
-def make_unordered_list(content: List[str]) -> str:
-    out = "<ul>"
-    for el in content:
-        out += f"<li>{el}</li>"
-    return out + "</ul>"
+    @staticmethod
+    def div(*args: List[str]) -> str:
+        return "<div>" + "\n".join(args) + "</div>"
+
+    @staticmethod
+    def h1(name: str) -> str:
+        return f"<h1>{name}</h1>"
+
+    @staticmethod
+    def h2(name: str) -> str:
+        return f"<h2>{name}</h2>"
+
+    @staticmethod
+    def h3(name: str) -> str:
+        return f"<h3>{name}</h3>"
+
+    @staticmethod
+    def h4(name: str) -> str:
+        return f"<h4>{name}</h4>"
 
 
 class HTMLGenerator(Generator):
@@ -50,12 +98,7 @@ class HTMLGenerator(Generator):
         self.output_path = Path(output)
         self.output_path_ver = self.output_path / self.version
 
-        self.fields = {
-            name: re.findall(r"{\w+}", content, re.MULTILINE)
-            for name, content in self.templates.items()
-        }
-
-        self.footer = f"Last generation at {datetime.now()}"
+        self.footer = f"<i>Last generation at {datetime.now()}</i>"
 
     def create_dir(self, name: str):
         (self.output_path / name).mkdir()
@@ -69,16 +112,19 @@ class HTMLGenerator(Generator):
             shutil.rmtree(str(self.output_path_ver))
             return self.generate_index()
 
-        sections = make_section(
+        sections = html.section(
             f"ArkScript {self.version} documentation",
             f"Welcome! This is the official documentation for ArkScript {self.version}" +
-                make_unordered_list([file.path for file in self.list.files])
+                html.ul([html.a(file.path, f"/{self.version}/{file.path}.html") for file in self.list.files])
         )
 
         content = self.templates["index.html"]
         content = content.format(
             page_title=f"ArkScript {self.version} documentation",
+            home_link=f"/{self.version}",
+            has_banner="has-banner",
             banner=self.templates["banner.html"],
+            table_of_content="",
             navigation_links="",
             sections=sections,
             footer=self.footer
@@ -88,5 +134,52 @@ class HTMLGenerator(Generator):
         logger.info("Generated", self.output_path_ver / "index.html")
 
     def generate_one(self, path: str, functions: List[spec.Function]):
-        local_fields = self.fields.copy()
+        sections = ""
+        table_of_content = self.templates["table_of_content.html"]
+        links = ""
+
+        for func in functions:
+            links += html.nav_item(func.name, html.anchorize(func.name))
+            content = html.div(
+                html.inline_code(func.signature), "<br>",
+                html.div(func.desc.brief),
+                html.div(
+                    html.b("Note"), ": ",
+                    func.desc.details
+                ),
+                html.div(
+                    html.h4(html.plural("Parameter", len(func.desc.params))),
+                    html.ul([
+                        f"{html.inline_code(p.name)}: {p.desc}" for p in func.desc.params
+                    ])
+                ),
+                html.div(
+                    html.h4(html.plural("Author", len(func.desc.authors))),
+                    ", ".join([
+                        html.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors
+                    ])
+                )
+            )
+            if func.desc.code:
+                content += html.div(
+                    html.h4("Example"),
+                    html.code(func.desc.code)
+                )
+            sections += html.section(func.name, content, anchor=html.anchorize(func.name))
+
+        table_of_content = table_of_content.format(table_of_content_links=links)
+
+        content = self.templates["index.html"]
+        content = content.format(
+            page_title=f"{path} - ArkScript {self.version} documentation",
+            home_link=f"/{self.version}",
+            has_banner="",
+            banner="",
+            table_of_content=table_of_content,
+            navigation_links="",
+            sections=sections,
+            footer=self.footer
+        )
+
+        (self.output_path_ver / f"{path}.html").write_text(content)
         return None
