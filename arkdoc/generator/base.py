@@ -11,8 +11,11 @@ from ..parser import Parser
 
 
 class Generator:
-    def __init__(self, parsers: List[Parser], template: Path):
-        self.template = template.read_text("utf-8")
+    def __init__(self, parsers: List[Parser], template_folder: Path, pattern: str):
+        self.templates = {
+            file.name: file.read_text("utf-8")
+            for file in template_folder.glob(pattern)
+        }
         self.list = spec.FileList([])
 
         registered = {}

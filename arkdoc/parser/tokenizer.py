@@ -78,7 +78,7 @@ def cpp_tokenize(code: str) -> List[str]:
         nonlocal line_num
         lines = line.split("\n")
 
-        for e in lines[1:-1]:
+        for e in lines[1:]:
             line = "#" + e.strip()[1:]
             line_num += 1
             yield Token("COMMENT", line, line_num, column)
