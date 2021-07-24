@@ -47,9 +47,7 @@ def compute(args) -> bool:
 
 def main() -> int:
     cli = argparse.ArgumentParser(description="ArkScript Documentation generator")
-    cli.add_argument(
-        "ark_version", type=str, help="ArkScript version number, eg 3.1.0"
-    )
+    cli.add_argument("ark_version", type=str, help="ArkScript version number, eg 3.1.0")
     cli.add_argument(
         "source_folder", type=str, help="Path to the ArkScript source folder"
     )

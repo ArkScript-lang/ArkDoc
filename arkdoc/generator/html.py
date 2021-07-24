@@ -19,7 +19,7 @@ class html:
 
     @staticmethod
     def nav_link(name: str, path: str) -> str:
-        return f"<a href=\"{path}\" class=\"btn btn-link\">{name}</a>"
+        return f'<a href="{path}" class="btn btn-link">{name}</a>'
 
     @staticmethod
     def anchorize(name: str) -> str:
@@ -33,7 +33,7 @@ class html:
 
     @staticmethod
     def a(name: str, path: str) -> str:
-        return f"<a href=\"{path}\">{name}</a>"
+        return f'<a href="{path}">{name}</a>'
 
     @staticmethod
     def b(content: str) -> str:
@@ -52,7 +52,7 @@ class html:
 </pre>"""
 
     @staticmethod
-    def section(title: str, content: str, anchor: str="") -> str:
+    def section(title: str, content: str, anchor: str = "") -> str:
         return f"""<section {f'id="{anchor}"' if anchor else ''}>
     <h2>{title}</h2>
 
@@ -91,7 +91,9 @@ class html:
 
 class HTMLGenerator(Generator):
     def __init__(self, parsers: List[Parser], output: str, ark_version: str):
-        super().__init__(parsers, spec.HTML_TEMPLATE_FOLDER, "*.html", output, ark_version)
+        super().__init__(
+            parsers, spec.HTML_TEMPLATE_FOLDER, "*.html", output, ark_version
+        )
 
         self.footer = f"<i>Last generation at {datetime.now()}</i>"
 
@@ -100,12 +102,19 @@ class HTMLGenerator(Generator):
 
     def generate_index(self):
         if not (self.output_path / "assets").exists():
-            shutil.copytree(str(self.template_folder / "assets"), str(self.output_path / "assets"))
+            shutil.copytree(
+                str(self.template_folder / "assets"), str(self.output_path / "assets")
+            )
 
         sections = html.section(
             f"ArkScript {self.version} documentation",
-            f"Welcome! This is the official documentation for ArkScript {self.version}" +
-                html.ul([html.a(file.path, f"/{self.version}/{file.path}.html") for file in self.list.files])
+            f"Welcome! This is the official documentation for ArkScript {self.version}"
+            + html.ul(
+                [
+                    html.a(file.path, f"/{self.version}/{file.path}.html")
+                    for file in self.list.files
+                ]
+            ),
         )
 
         content = self.templates["index.html"]
@@ -117,7 +126,7 @@ class HTMLGenerator(Generator):
             table_of_content="",
             navigation_links="",
             sections=sections,
-            footer=self.footer
+            footer=self.footer,
         )
 
         (self.output_path_ver / "index.html").write_text(content)
@@ -131,31 +140,31 @@ class HTMLGenerator(Generator):
         for func in functions:
             links += html.nav_item(func.name, html.anchorize(func.name))
             content = html.div(
-                html.inline_code(func.signature), "<br>",
+                html.inline_code(func.signature),
+                "<br>",
                 html.div(func.desc.brief),
-                html.div(
-                    html.b("Note"), ": ",
-                    func.desc.details
-                ),
+                html.div(html.b("Note"), ": ", func.desc.details),
                 html.div(
                     html.h4(html.plural("Parameter", len(func.desc.params))),
-                    html.ul([
-                        f"{html.inline_code(p.name)}: {p.desc}" for p in func.desc.params
-                    ])
+                    html.ul(
+                        [
+                            f"{html.inline_code(p.name)}: {p.desc}"
+                            for p in func.desc.params
+                        ]
+                    ),
                 ),
                 html.div(
                     html.h4(html.plural("Author", len(func.desc.authors))),
-                    ", ".join([
-                        html.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors
-                    ])
-                )
+                    ", ".join(
+                        [html.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
+                    ),
+                ),
             )
             if func.desc.code:
-                content += html.div(
-                    html.h4("Example"),
-                    html.code(func.desc.code)
-                )
-            sections += html.section(func.name, content, anchor=html.anchorize(func.name))
+                content += html.div(html.h4("Example"), html.code(func.desc.code))
+            sections += html.section(
+                func.name, content, anchor=html.anchorize(func.name)
+            )
 
         table_of_content = table_of_content.format(table_of_content_links=links)
 
@@ -168,7 +177,7 @@ class HTMLGenerator(Generator):
             table_of_content=table_of_content,
             navigation_links="",
             sections=sections,
-            footer=self.footer
+            footer=self.footer,
         )
 
         (self.output_path_ver / f"{path}.html").write_text(content)
