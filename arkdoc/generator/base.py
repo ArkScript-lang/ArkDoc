@@ -18,7 +18,9 @@ class Generator:
             for file in template_folder.glob(pattern)
         }
         self.list = spec.FileList([])
+        self._create_files_list(parsers)
 
+    def _create_files_list(self, parsers: List[Parser]):
         registered = {}
 
         for p in parsers:
@@ -30,10 +32,10 @@ class Generator:
             if base in registered:
                 registered[base].functions += functions
             else:
-                file = spec.File(base, functions)
-                registered[base] = file
+                registered[base] = spec.File(base, functions)
+                self.list.files.append(registered[base])
 
-            self.list.files.append(file)
+        self.list.files = [f for f in self.list.files if len(f.functions)]
 
     def generate_index(self):
         raise NotImplementedError
