@@ -36,7 +36,8 @@ def compute(args) -> bool:
 
     if not args.dry_run:
         if args.html:
-            gen = HTMLGenerator(parsers, args.html)
+            # TODO put a flag or find the version
+            gen = HTMLGenerator(parsers, args.html, "3.1.0")
             gen()
         else:
             logger.error("Missing generator!")
