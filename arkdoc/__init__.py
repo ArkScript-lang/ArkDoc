@@ -2,7 +2,8 @@
 
 from .logger_utils import Logger, LogLevel
 
-logger = Logger("ArkDoc", level=LogLevel.INFO)
+import os
+logger = Logger("ArkDoc", level=LogLevel[os.environ.get("ARKDOC_LOGLEVEL", "INFO")])
 
 from .parser import Parser
 from .reader import parse_all_in
