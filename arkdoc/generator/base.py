@@ -12,11 +12,17 @@ from ..parser import Parser
 
 
 class Generator:
-    def __init__(self, parsers: List[Parser], template_folder: Path, pattern: str, output: str, ark_version: str):
+    def __init__(
+        self,
+        parsers: List[Parser],
+        template_folder: Path,
+        pattern: str,
+        output: str,
+        ark_version: str,
+    ):
         self.template_folder = template_folder
         self.templates = {
-            file.name: file.read_text("utf-8")
-            for file in template_folder.glob(pattern)
+            file.name: file.read_text("utf-8") for file in template_folder.glob(pattern)
         }
         self.version = ark_version
         self.output_path = Path(output)
@@ -57,6 +63,8 @@ class Generator:
         self.generate_index()
 
         for file in self.list.files:
-            logger.info(f"Generating {file.path} documentation... found {len(file.functions)} functions")
+            logger.info(
+                f"Generating {file.path} documentation... found {len(file.functions)} functions"
+            )
 
             self.generate_one(file.path, file.functions)
