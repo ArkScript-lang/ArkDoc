@@ -1,10 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{title}</title>
-        <meta encoding="utf-8">
-    </head>
-    <body>
-        {content}
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{page_title}</title>
+    <link rel="stylesheet" href="/assets/css/spectre.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/spectre-icons.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/rainbowjs-theme.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="navbar has-banner">
+        <a href="#" class="btn btn-link show-xl" tabindex="0" id="menu-show"><i class="icon icon-menu"></i></a>
+        <section class="navbar-section hide-xl"></section>
+        <section class="navbar-center hide-xl">
+            <a href="/" class="btn btn-link">Home</a>
+            {navigation_links}
+            <div class="divider half"></div>
+            <a href="https://github.com/ArkScript-lang/Ark" target="_blank" class="btn btn-link">Github</a>
+            <a href="https://discord.gg/YT5yDwn" target="_blank" class="btn btn-link">Discord</a>
+        </section>
+        <section class="navbar-section logo">
+            <a href="/" class="hide"><img src="/assets/images/Ark-slim.png" alt="ArkScript"></a>
+        </section>
+    </header>
+
+    {banner}
+
+    <!-- MAIN CONTENT -->
+    <div class="container" id="main">
+        <div class="columns">
+            <!-- The col-2 divs are an easy way to put some margin around the main content -->
+            <div class="col-2 hide-md"></div>
+
+            <!-- Actual content of the page-->
+            <div class="col-8 col-md-12" id="content">
+                {sections}
+            </div>
+            <!-- end of content -->
+
+            <!-- Margin again -->
+            <div class="col-2 hide-md"></div>
+        </div>
+    </div>
+
+    <footer id="page-footer">
+        <p class="text-center">
+            Copyright &copy; 2020-2021 Alexandre Plateau & Fabien Zoccola.<br> All rights reserved.<br>
+            {footer}
+        </p>
+    </footer>
+
+    <!-- Rainbow.js for syntax coloring -->
+    <script src="/assets/js/rainbow.min.js"></script>
+    <script src="/assets/js/languages/arkscript.js"></script>
+</body>
+
 </html>

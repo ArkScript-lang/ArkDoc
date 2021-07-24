@@ -1,0 +1,77 @@
+@import "_vars.sass"
+
+body
+    background-color: $menus-bg-color
+    color: $menus-color
+    margin: 0
+    padding: 0
+    min-height: 100vh
+
+
+// Images
+img.fit
+    width: 100%
+img.three-quarters
+    width: 75%
+
+// Code and codeblocks
+code:not(.rainbowjs), div.codeblock
+    background-color: $menus-bg-color
+    color: $menus-color
+    word-break: break-all
+code:not(.rainbowjs).error, div.codeblock.error
+    color: #d73e48
+code.rainbowjs
+    color: $body-color
+    background-color: inherit
+div.codeblock, pre
+    padding: 0 10px !important
+    font-family: "SF Mono","Segoe UI Mono","Roboto Mono",Menlo,Courier,monospace
+    font-size: 110% !important
+    line-height: 0.5
+    border-radius: .1rem
+
+// Rainbowjs fucking up with the positions
+pre.preloader, div.preloader
+    position: initial
+
+    
+// Spectre.css overrides to fit in with the theme
+.divider
+    border-top: none
+    border-left: 1px solid lighten($body-bg-color, 8%)
+    height: $header-height
+.divider.half
+    height: $header-height / 2
+
+pre code.rainbowjs span.label
+    background: initial
+
+.btn:not(.btn-link)
+    border-color: $btn-primary-bg-color !important
+    &:hover
+        border-color: darken($btn-primary-bg-color, 2%) !important
+
+.btn.btn-link, .btn-link, .btn.btn-link:focus
+    color: $btn-link-color
+    &:hover
+        color: lighten($btn-link-color, 10%)
+
+.btn:hover
+    border-radius: 5px
+    transition: border-radius 0.1s ease-in-out
+
+.btn.btn-primary
+    color: $body-color
+    background: $btn-primary-bg-color
+    &:hover
+        background-color: darken($btn-primary-bg-color, 5%)
+
+// Adding another animation from a Spectre.css keyframes
+@keyframes slide-left
+    0%
+        opacity: 0
+        transform: translateX(1.6rem)
+    100%
+        opacity: 1
+        transform: translateX(0)

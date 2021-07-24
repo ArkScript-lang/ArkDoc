@@ -1,0 +1,60 @@
+@import "_vars.sass"
+
+ul.no-dot
+    list-style: none
+    padding-left: $big-dim-px
+
+// main container
+#main
+    width: 100vw
+    background-color: $body-bg-color
+    min-height: 100vh - $header-height * 1.5 - $footer-height
+
+// content
+#content
+    padding: 5vh 0
+
+    #nota-bene
+        margin: $big-dim-px 0
+
+    .inner-section
+        padding-left: $big-dim-px
+        border-left: 1px solid lighten($body-bg-color, 8%)
+
+    h3, h4, h5, h6
+        margin-top: 3vh
+
+#content > section, .inner-section > section
+    margin-bottom: 3.5%
+
+table.table.dark
+    background-color: $menus-bg-color
+.table.table-striped tbody tr:nth-of-type(odd)
+    background-color: darken($menus-bg-color, 3%)
+.table.table-hover tbody tr:hover
+    background-color: darken($menus-bg-color, 6%)
+
+// rainbowJS
+code.rainbowjs
+    display: block
+    overflow-x: auto
+
+pre.rainbow-show
+    position: initial
+
+// Responsive
+@media screen and (max-width: $break-width)
+    // remove content side columns
+    .col-2
+        display: none
+    .col-8
+        width: 100vw
+
+    #content
+        margin-top: $header-height * 1.5
+        padding: 5vh 10px
+        h2
+            text-align: center
+        section .inner-section
+            padding: 0
+            border: none
