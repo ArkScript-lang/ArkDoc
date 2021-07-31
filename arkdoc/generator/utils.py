@@ -20,10 +20,11 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
                 if tag in comment.value:
                     res = re.sub(fr"#+ *{tag}", "", comment.value).strip()
 
-                    if isinstance(data[key], list):
-                        data[key].append(res)
-                    else:
-                        data[key] = res
+                    if res:
+                        if isinstance(data[key], list):
+                            data[key].append(res)
+                        else:
+                            data[key] = res
             else:
                 if "=begin" in comment.value:
                     in_code = True
@@ -41,7 +42,7 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
         param_name, desc = param.split(" ", 1)
         data["param"][i] = spec.Param(param_name, desc)
 
-    data["author"] = [el.strip() for el in data["author"].split(",")]
+    data["author"] = [el.strip() for el in data["author"].split(",") if data["author"]]
 
     return data, "\n".join(code)
 

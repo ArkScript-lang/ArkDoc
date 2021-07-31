@@ -139,6 +139,16 @@ class HTMLGenerator(Generator):
 
         for func in functions:
             links += html.nav_item(func.name, html.anchorize(func.name))
+            authors = (
+                html.div(
+                    html.h4(html.plural("Author", len(func.desc.authors))),
+                    ", ".join(
+                        [html.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
+                    ),
+                )
+                if func.desc.authors
+                else ""
+            )
             content = html.div(
                 html.inline_code(func.signature),
                 "<br>",
@@ -153,12 +163,7 @@ class HTMLGenerator(Generator):
                         ]
                     ),
                 ),
-                html.div(
-                    html.h4(html.plural("Author", len(func.desc.authors))),
-                    ", ".join(
-                        [html.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
-                    ),
-                ),
+                authors,
             )
             if func.desc.code:
                 content += html.div(html.h4("Example"), html.code(func.desc.code))
