@@ -34,4 +34,4 @@ jobs:
       - run: pip install -r requirements.txt
       - run: |
           export ARKDOC_LOGLEVEL=DEBUG
-          python -m arkdoc 3.1.0 std-latest/ --builtins ark-latest/src/Builtins --html out || exit 1
+          python -m arkdoc 3.1.0 std-latest/ ark-latest/src/Builtins --html out || exit 1
