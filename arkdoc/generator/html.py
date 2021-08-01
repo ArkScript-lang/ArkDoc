@@ -90,9 +90,9 @@ class html:
 
 
 class HTMLGenerator(Generator):
-    def __init__(self, parsers: List[Parser], output: str, ark_version: str):
+    def __init__(self, parsers: List[Parser], output: str, ark_version: str, root: str):
         super().__init__(
-            parsers, spec.HTML_TEMPLATE_FOLDER, "*.html", output, ark_version
+            parsers, spec.HTML_TEMPLATE_FOLDER, "*.html", output, ark_version, root
         )
 
         self.footer = f"<i>Last generation at {datetime.now()}</i>"
@@ -111,7 +111,7 @@ class HTMLGenerator(Generator):
             f"Welcome! This is the official documentation for ArkScript {self.version}"
             + html.ul(
                 [
-                    html.a(file.path, f"/{self.version}/{file.path}.html")
+                    html.a(file.path, f"{self.root}/{self.version}/{file.path}.html")
                     for file in self.list.files
                 ]
             ),
@@ -119,10 +119,11 @@ class HTMLGenerator(Generator):
 
         content = self.templates["index.html"]
         content = content.format(
+            root=self.root,
             page_title=f"ArkScript {self.version} documentation",
-            home_link=f"/{self.version}",
+            home_link=f"{self.root}/{self.version}",
             has_banner="has-banner",
-            banner=self.templates["banner.html"],
+            banner=self.templates["banner.html"].format(root=self.root),
             table_of_content="",
             navigation_links="",
             sections=sections,
@@ -180,8 +181,9 @@ class HTMLGenerator(Generator):
 
         content = self.templates["index.html"]
         content = content.format(
+            root=self.root,
             page_title=f"{path} - ArkScript {self.version} documentation",
-            home_link=f"/{self.version}",
+            home_link=f"{self.root}/{self.version}",
             has_banner="",
             banner="",
             table_of_content=table_of_content,

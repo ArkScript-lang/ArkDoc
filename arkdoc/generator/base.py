@@ -19,14 +19,16 @@ class Generator:
         pattern: str,
         output: str,
         ark_version: str,
+        root: str,
     ):
         self.template_folder = template_folder
         self.templates = {
             file.name: file.read_text("utf-8") for file in template_folder.glob(pattern)
         }
-        self.version = ark_version
         self.output_path = Path(output)
+        self.version = ark_version
         self.output_path_ver = self.output_path / self.version
+        self.root = root if root and root[-1] != "/" else root[:-1]
         self.list = spec.FileList([])
         self._create_files_list(parsers)
 
