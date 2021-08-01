@@ -149,11 +149,7 @@ class HTMLGenerator(Generator):
                 if func.desc.authors
                 else ""
             )
-            content = html.div(
-                html.inline_code(func.signature),
-                "<br>",
-                html.div(func.desc.brief),
-                html.div(html.b("Note"), ": ", func.desc.details),
+            parameters = (
                 html.div(
                     html.h4(html.plural("Parameter", len(func.desc.params))),
                     html.ul(
@@ -162,7 +158,16 @@ class HTMLGenerator(Generator):
                             for p in func.desc.params
                         ]
                     ),
-                ),
+                )
+                if func.desc.params
+                else ""
+            )
+            content = html.div(
+                html.inline_code(func.signature),
+                "<br>",
+                html.div(func.desc.brief),
+                html.div(html.b("Note"), ": ", func.desc.details),
+                parameters,
                 authors,
             )
             if func.desc.code:
