@@ -1,7 +1,10 @@
 # Change Log
 
-## [Unreleased]
+## [v0.1.0] - 2021-08-08
 ### Added
+- possibility to generate documentation from C++ code
+- possibility to give multiple folders to the generator
+- possibility to add a specific version for the generated documentation
 
 ### Changed
 - rewriting the project in Python 3
