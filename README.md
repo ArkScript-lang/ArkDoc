@@ -57,3 +57,7 @@ python3 -m arkdoc --help
     })
 }))
 ```
+
+## The project architecture
+
+![architecture of the project as bubbles, representing the folders and their subfolders/files](diagram.svg)
