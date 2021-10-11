@@ -19,4 +19,3 @@ jobs:
       with:
         output_file: 'diagram.svg'
         excluded_paths: 'dist,node_modules'
-        max_depth: 2
