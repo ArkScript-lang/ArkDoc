@@ -47,7 +47,9 @@ class Generator:
                 registered[base] = spec.File(base, functions)
                 self.list.files.append(registered[base])
 
-        self.list.files = sorted([f for f in self.list.files if len(f.functions)], key=lambda file: file.path)
+        self.list.files = sorted(
+            [f for f in self.list.files if len(f.functions)], key=lambda file: file.path
+        )
 
     def generate_index(self):
         raise NotImplementedError
