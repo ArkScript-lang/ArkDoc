@@ -1,13 +1,9 @@
 # Change Log
 
-## [Unreleased changes]
-### Added
-
+## [v0.2.0] - 2022-03-10
 ### Changed
 - the links on the home page are generated in alphabetical order
 - the header layout is now fixed #11
-
-### Removed
 
 ## [v0.1.0] - 2021-08-08
 ### Added
