@@ -4,7 +4,7 @@ import re
 from typing import List
 
 from . import Documentation, Source
-from .tokenizer import cpp_tokenize, tree_from_tokens, cpp_tokenize, tokenize, Token
+from .tokenizer import cpp_tokenize, tree_from_tokens, tokenize, Token
 from .. import logger
 
 

@@ -22,6 +22,7 @@ Keywords = "let mut set del fun if while import begin quote".split()
 TokenSpecification = [
     ("NUMBER", r"\d+(\.\d*)?"),
     ("STRING", r"\"[^\"]*\""),
+    ("BEGIN_MACRO", r"!{"),        # TODO: this will have to change when v4 will be delivered
     ("ID", r"[\w:?=!@&<>+\-%*/.]+"),
     ("LPAREN", r"[(\[{]"),
     ("RPAREN", r"[)\]}]"),
@@ -100,7 +101,7 @@ def tree_from_tokens(tokens: List[Token]) -> List:
         L.append(token)
         token = tokens.pop(0)
 
-    if token.type == "LPAREN":
+    if token.type == "LPAREN" or token.type == "BEGIN_MACRO":
         L2 = []
         while tokens[0].type != "RPAREN":
             L2.append(tree_from_tokens(tokens))
