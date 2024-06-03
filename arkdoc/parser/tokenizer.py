@@ -18,11 +18,11 @@ class Token:
         )
 
 
-Keywords = "let mut set del fun if while import begin quote".split()
+Keywords = "let mut set del fun if while import begin".split()
 TokenSpecification = [
     ("NUMBER", r"\d+(\.\d*)?"),
     ("STRING", r"\"[^\"]*\""),
-    ("BEGIN_MACRO", r"!{"),        # TODO: this will have to change when v4 will be delivered
+    ("BEGIN_MACRO", r"(\$"),
     ("ID", r"[\w:?=!@&<>+\-%*/.]+"),
     ("LPAREN", r"[(\[{]"),
     ("RPAREN", r"[)\]}]"),
