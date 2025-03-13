@@ -5,3 +5,4 @@ __pycache__/
 venv/
 out/
 .idea/
+.DS_Store
