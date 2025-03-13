@@ -38,11 +38,12 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
         margin = code[0].index("(")
         code = [line[margin:] for line in code]
 
-    for i, param in enumerate(data["param"]):
-        param_name, desc = param.split(" ", 1)
-        data["param"][i] = spec.Param(param_name, desc)
-
-    data["author"] = [el.strip() for el in data["author"].split(",") if data["author"]]
+    if "param" in data:
+        for i, param in enumerate(data["param"]):
+            param_name, desc = param.split(" ", 1)
+            data["param"][i] = spec.Param(param_name, desc)
+    if "author" in data:
+        data["author"] = [el.strip() for el in data["author"].split(",") if data["author"]]
 
     return data, "\n".join(code)
 
