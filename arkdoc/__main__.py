@@ -59,8 +59,8 @@ def compute(args) -> bool:
                 for doc in p.extract_documentation():
                     if doc.source == Source.ArkScript:
                         kw, name, *args = doc.signature()
-                        if kw == "$":
-                            # macro!
+                        if kw == "$" or kw == "macro":
+                            # macro! (handling both $ and macro for retro compatibility for now (21/05/2025))
                             functions.append(name)
                         else:
                             functions.append(prefix + ":" + name)
