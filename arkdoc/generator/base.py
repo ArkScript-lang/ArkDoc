@@ -5,7 +5,7 @@ import os
 from typing import List
 from pathlib import Path
 
-from . import specification as spec
+from . import specification as spec, Formatter
 from . import documentation_to_specification
 from .. import logger
 from ..parser import Parser
@@ -13,15 +13,17 @@ from ..parser import Parser
 
 class Generator:
     def __init__(
-        self,
-        parsers: List[Parser],
-        template_folder: Path,
-        pattern: str,
-        output: str,
-        ark_version: str,
-        root: str,
+            self,
+            parsers: List[Parser],
+            template_folder: Path,
+            formatter: Formatter,
+            pattern: str,
+            output: str,
+            ark_version: str,
+            root: str,
     ):
         self.template_folder = template_folder
+        self.formatter = formatter
         self.templates = {
             file.name: file.read_text("utf-8") for file in template_folder.glob(pattern)
         }
@@ -53,6 +55,51 @@ class Generator:
 
     def generate_index(self):
         raise NotImplementedError
+
+    def generate_sections(self, functions: List[spec.Function], with_hr: bool=False):
+        sections = ""
+
+        for func in functions:
+            authors = (
+                self.formatter.div(
+                    self.formatter.h4(self.formatter.plural("Author", len(func.desc.authors))),
+                    ", ".join(
+                        [self.formatter.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
+                    ),
+                )
+                if func.desc.authors
+                else ""
+            )
+            parameters = (
+                self.formatter.div(
+                    self.formatter.h4(self.formatter.plural("Parameter", len(func.desc.params))),
+                    self.formatter.ul(
+                        [
+                            f"{self.formatter.inline_code(p.name)}: {p.desc}"
+                            for p in func.desc.params
+                        ]
+                    ),
+                )
+                if func.desc.params
+                else ""
+            )
+            content = self.formatter.div(
+                self.formatter.div(self.formatter.inline_code(func.signature)),
+                self.formatter.div(func.desc.brief),
+                self.formatter.new_line(),
+                self.formatter.div(self.formatter.b("Note"), ": ", func.desc.details) if func.desc.details else "",
+                parameters,
+                authors,
+            )
+            if func.desc.code:
+                content += self.formatter.div(self.formatter.h4("Example"), self.formatter.code(func.desc.code))
+            sections += self.formatter.section(
+                func.name,
+                (self.formatter.hr() if with_hr else "") + content,
+                anchor=self.formatter.anchorize(func.name)
+            )
+
+        return sections
 
     def generate_one(self, path: str, functions: List[spec.Function]):
         raise NotImplementedError

@@ -6,6 +6,7 @@ from typing import List
 from enum import Enum
 
 from .tokenizer import Token
+from .. import logger
 
 
 def deep_flatten(lst):
@@ -27,14 +28,16 @@ class Documentation:
     comments: List[Token]
     target: List
 
+    macro_keywords = ("$", "macro")
+
     def _token_format(self, token: Token):
         return token.value
 
-    def signature(self, on: List[Token] = None):
+    def signature(self):
         def transform(L):
             return list(map(lambda t: t.value, deep_flatten(L)))
 
-        top = self.target[:] if on is None else on
+        top = self.target[:]
 
         while True:
             if isinstance(top, list) and len(top) and isinstance(top[0], list):
@@ -42,15 +45,26 @@ class Documentation:
             else:
                 break
 
-        if on is None:
-            return transform(top[:2]) + self.signature(on=top[2])
+        kw, name = top[:2]
+
+        if isinstance(top[2], list) and len(top[2][0]) >= 2:
+            args = transform(top[2][0][1]) if kw.value not in self.macro_keywords else transform(top[2][0])
+            return [kw.value, name.value, args]
         else:
-            return transform(top[1:2])
+            return [kw.value, name.value, None]
 
     @property
     def pretty_signature(self):
-        kw, name, *args = self.signature()
-        return f"({kw} {name} (fun ({' '.join(args)}) (...)))"
+        kw, name, args = self.signature()
+
+        sig = f"({kw} {name} "
+        if args is None:
+            sig += "<value>)"
+        elif kw not in self.macro_keywords:
+            sig += f"(fun ({' '.join(args)}) (...)))"
+        else:
+            sig += f"({' '.join(args)}) (...))"
+        return sig
 
     @property
     def defined_at(self):

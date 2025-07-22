@@ -49,13 +49,13 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
 
 
 def from_ark(doc: Documentation) -> spec.Function:
-    _, name, *args = doc.signature()
+    _, name, args = doc.signature()
     data, code = extractor({"brief": "", "details": "", "param": [], "author": ""}, doc)
 
-    if len(data["param"]) != len(args):
+    if args is not None and len(data["param"]) != len(args):
         logger.warn(
             f"Function {name} was defined with {len(args)} arguments, "
-            f"but only {len(data['param'])} are documented"
+            f"but {len(data['param'])} are documented"
         )
 
     return spec.Function(

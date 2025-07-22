@@ -9,7 +9,7 @@ from arkdoc.parser import Source
 from . import logger
 from .logger_utils import LogLevel
 from .reader import parse_all_in
-from .generator import HTMLGenerator
+from .generator import HTMLGenerator, MDGenerator
 
 
 EXIT_SUCCESS = 0
@@ -58,7 +58,7 @@ def compute(args) -> bool:
                 prefix = os.path.splitext(os.path.basename(p.filename))[0].lower()
                 for doc in p.extract_documentation():
                     if doc.source == Source.ArkScript:
-                        kw, name, *args = doc.signature()
+                        kw, name, args = doc.signature()
                         if kw == "$" or kw == "macro":
                             # macro! (handling both $ and macro for retro compatibility for now (21/05/2025))
                             functions.append(name)
@@ -73,6 +73,9 @@ def compute(args) -> bool:
 
         if args.html:
             gen = HTMLGenerator(parsers, args.html, args.ark_version, args.root_dir)
+            gen()
+        elif args.markdown:
+            gen = MDGenerator(parsers, args.markdown, args.ark_version, args.root_dir)
             gen()
         else:
             logger.error("Missing generator!")
@@ -98,6 +101,7 @@ def main() -> int:
         help="Extract only the function names, print them on separate lines and exit",
     )
     cli.add_argument("--html", type=str, help="Output folder for the HTML docs")
+    cli.add_argument("--markdown", type=str, help="Output folder for the Markdown docs")
     cli.add_argument(
         "--root-dir", type=str, default="", help="The root dir for the links"
     )

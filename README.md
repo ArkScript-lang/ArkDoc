@@ -28,10 +28,10 @@ python3 -m arkdoc --help
 
 - `@brief <description>`: a single brief declaration is expected
 - `@param <name> <description>`: multiple `@param` declaration can be written
-- `@details <description>`: a single detailled declaration is expected
+- `@details <description>`: a single detailed declaration is expected
 - `=begin` / code block / `=end`: a single code block (it can contain multiple lines) is expected
 - `@author <url>,<url>,...`: the url to the profiles of the authors must be separated by commas, spaces can be added
-- any line not starting with a `@<keyword>` will be ignored, unless it is enclosed in a `=begin`/`=end` bloc
+- any line not starting with a `@<keyword>` will be ignored, unless it is enclosed in a `=begin`/`=end` block
 
 ## Example
 
@@ -44,8 +44,7 @@ python3 -m arkdoc --help
 # (import "List.ark")
 # (let collection [1 2 5 12])
 # (list:forEach collection (fun (element) {
-#     (print element)
-# }))
+#     (print element) }))
 # =end
 # @author https://github.com/SuperFola
 (let list:forEach (fun (_L _func) {
@@ -53,9 +52,7 @@ python3 -m arkdoc --help
     (while (< _index (len _L)) {
         (mut _element (@ _L _index))
         (_func _element)
-        (set _index (+ 1 _index))
-    })
-}))
+        (set _index (+ 1 _index)) })}))
 ```
 
 ## The project architecture

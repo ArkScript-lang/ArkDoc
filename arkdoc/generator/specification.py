@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-HTML_TEMPLATE_FOLDER = Path("templates")
+HTML_TEMPLATE_FOLDER = Path("templates/html")
+MD_TEMPLATE_FOLDER = Path("templates/markdown")
 
 
 @dataclass
