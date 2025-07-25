@@ -71,7 +71,7 @@ class MDGenerator(Generator):
         content = self.templates["_index.md"]
         content = content.format(
             title="Standard library",
-            date=self.generated_at,
+            date=f"{self.generated_at}+02:00",
             content=sections,
         )
 
@@ -88,7 +88,8 @@ class MDGenerator(Generator):
         template = template.format(
             title=path,
             slug=self.formatter.anchorize(path),
-            date=self.generated_at,
+            date=f"{self.generated_at}+02:00",
+            weight=410,
             content=sections,
         )
 

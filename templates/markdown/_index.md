@@ -5,7 +5,7 @@ summary: ""
 date: {date}
 lastmod: {date}
 draft: false
-weight: 900
+weight: 400
 toc: true
 sidebar:
   collapsed: true

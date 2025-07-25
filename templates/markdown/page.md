@@ -6,7 +6,7 @@ summary: ""
 date: {date}
 lastmod: {date}
 draft: false
-weight: 400
+weight: {weight}
 toc: true
 seo:
   title: "" # custom title (optional)
