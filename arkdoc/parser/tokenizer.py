@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import re
-from typing import List
+from typing import List, Any, Generator
 from dataclasses import dataclass
 
 
@@ -21,7 +21,7 @@ class Token:
 Keywords = "let mut set del fun if while import begin".split()
 TokenSpecification = [
     ("NUMBER", r"\d+(\.\d*)?"),
-    ("STRING", r"\"[^\"]*\""),
+    ("STRING", r"\"(\\\\|\\\"|[^\"])*\""),
     ("ID", r"[\w:?=!@&<>+\-%*/.$]+"),
     ("LPAREN", r"[(\[{]"),
     ("RPAREN", r"[)\]}]"),
@@ -32,7 +32,7 @@ TokenSpecification = [
 ]
 
 
-def tokenize(code: str) -> List[Token]:
+def tokenize(code: str) -> Generator[Token, Any, None]:
     tok_regex = "|".join("(?P<%s>%s)" % pair for pair in TokenSpecification)
     line_num = 1
     line_start = 0
@@ -98,13 +98,18 @@ def tree_from_tokens(tokens: List[Token]) -> List:
     L = []
     while token.type == "COMMENT":
         L.append(token)
+        if not tokens:
+            raise RuntimeError(f"Expected more after {token}")
         token = tokens.pop(0)
 
     if token.type == "LPAREN":
         L2 = []
+        last_token = tokens[0]
         while tokens[0].type != "RPAREN":
+            if not tokens:
+                raise SyntaxError(f"No more tokens after {last_token}")
             L2.append(tree_from_tokens(tokens))
-        tokens.pop(0)
+        last_token = tokens.pop(0)
         L.append(L2)
         return L
     elif token.type == "RPAREN":
