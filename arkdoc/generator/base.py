@@ -62,7 +62,8 @@ class Generator:
         for func in functions:
             authors = (
                 self.formatter.div(
-                    self.formatter.h4(self.formatter.plural("Author", len(func.desc.authors))),
+                    self.formatter.b(self.formatter.plural("Author", len(func.desc.authors))),
+                    ": ",
                     ", ".join(
                         [self.formatter.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
                     ),
@@ -88,8 +89,10 @@ class Generator:
                 self.formatter.div(func.desc.brief),
                 self.formatter.new_line(),
                 self.formatter.div(self.formatter.b("Note"), ": ", func.desc.details) if func.desc.details else "",
-                parameters,
+                self.formatter.new_line(),
                 authors,
+                self.formatter.new_line(),
+                parameters,
             )
             if func.desc.code:
                 content += self.formatter.div(self.formatter.h4("Example"), self.formatter.code(func.desc.code))
