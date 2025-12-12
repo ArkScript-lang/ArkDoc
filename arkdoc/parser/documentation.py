@@ -30,12 +30,17 @@ class Documentation:
 
     macro_keywords = ("$", "macro")
 
-    def _token_format(self, token: Token):
-        return token.value
-
     def signature(self):
         def transform(L):
-            return list(map(lambda t: t.value, deep_flatten(L)))
+            out = []
+            for t in L:
+                if isinstance(t, list) and len(t) == 1 and isinstance(t[0], list) and len(t[0]) == 2:
+                    out.append(f"({t[0][0].value} {t[0][1].value})")
+                elif not isinstance(t, list):
+                    out.append(t.value)
+                else:
+                    raise NotImplementedError(f"token not parsed correctly in arglist: {t}")
+            return out
 
         top = self.target[:]
 
@@ -48,7 +53,10 @@ class Documentation:
         kw, name = top[:2]
 
         if isinstance(top[2], list) and len(top[2][0]) >= 2:
-            args = transform(top[2][0][1]) if kw.value not in self.macro_keywords else transform(top[2][0])
+            if kw.value not in self.macro_keywords:
+                args = transform(top[2][0][1][0])
+            else:
+                args = transform(top[2][0])
             return [kw.value, name.value, args]
         else:
             return [kw.value, name.value, None]
