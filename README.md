@@ -54,7 +54,3 @@ python3 -m arkdoc --help
         (_func _element)
         (set _index (+ 1 _index)) })}))
 ```
-
-## The project architecture
-
-![architecture of the project as bubbles, representing the folders and their subfolders/files](diagram.svg)
