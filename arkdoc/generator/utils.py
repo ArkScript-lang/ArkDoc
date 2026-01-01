@@ -2,10 +2,20 @@
 
 import re
 from typing import Tuple, Dict
+from copy import deepcopy
 
 from . import specification as spec
 from ..parser import Documentation, Source
 from .. import logger
+
+DEFAULT_KEYS = {
+    "brief": "",
+    "details": "",
+    "param": [],
+    "author": "",
+    "deprecated": "",
+    "changed": []
+}
 
 
 def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
@@ -42,42 +52,54 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
         for i, param in enumerate(data["param"]):
             param_name, desc = param.split(" ", 1)
             data["param"][i] = spec.Param(param_name, desc)
+    if "changed" in data:
+        for i, changed in enumerate(data["changed"]):
+            version, desc = changed.split(" ", 1)
+            data["changed"][i] = spec.Change(version, desc)
     if "author" in data:
         data["author"] = [el.strip() for el in data["author"].split(",") if data["author"]]
 
     return data, "\n".join(code)
 
 
+def describe(data: Dict, code: str) -> spec.Description:
+    return spec.Description(
+        brief=data["brief"],
+        details=data["details"],
+        params=data["param"],
+        code=code,
+        authors=data["author"],
+        deprecation_notice=data["deprecated"],
+        changelist=data["changed"]
+    )
+
+
 def from_ark(doc: Documentation) -> spec.Function:
     _, name, args = doc.signature()
-    data, code = extractor({"brief": "", "details": "", "param": [], "author": ""}, doc)
+    data, code = extractor(deepcopy(DEFAULT_KEYS), doc)
 
     if args is not None and len(data["param"]) != len(args):
         logger.warn(
-            f"Function {name} was defined with {len(args)} arguments, "
+            f"Function {name} was defined with {len(args)} argument(s), "
             f"but {len(data['param'])} are documented"
         )
 
     return spec.Function(
         name,
         doc.pretty_signature,
-        spec.Description(
-            data["brief"], data["details"], data["param"], code, data["author"]
-        ),
+        describe(data, code),
     )
 
 
 def from_cpp(doc: Documentation) -> spec.Function:
-    data, code = extractor(
-        {"name": "", "brief": "", "details": "", "param": [], "author": ""}, doc
-    )
+    parameters = {"name": ""}
+    parameters.update(deepcopy(DEFAULT_KEYS))
+    data, code = extractor(parameters, doc)
 
     return spec.Function(
         data["name"],
         f"Builtin ({data['name']} {' '.join(e.name for e in data['param'])})",
-        spec.Description(
-            data["brief"], data["details"], data["param"], code, data["author"]
-        ),
+        describe(data, code),
     )
 
 

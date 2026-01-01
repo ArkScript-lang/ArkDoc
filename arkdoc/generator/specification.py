@@ -16,12 +16,20 @@ class Param:
 
 
 @dataclass
+class Change:
+    version: str
+    desc: str
+
+
+@dataclass
 class Description:
     brief: str
     details: str
     params: List[Param]
     code: str
     authors: List[str]
+    deprecation_notice: str
+    changelist: List[Change]
 
 
 @dataclass

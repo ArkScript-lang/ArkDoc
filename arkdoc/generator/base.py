@@ -56,7 +56,7 @@ class Generator:
     def generate_index(self):
         raise NotImplementedError
 
-    def generate_sections(self, functions: List[spec.Function], with_hr: bool=False):
+    def generate_sections(self, functions: List[spec.Function], with_hr: bool = False):
         sections = ""
 
         for func in functions:
@@ -84,10 +84,38 @@ class Generator:
                 if func.desc.params
                 else ""
             )
+            maybe_deprecated_notice = (
+                self.formatter.div(
+                    self.formatter.b("Deprecated"),
+                    ": ",
+                    func.desc.deprecation_notice,
+                    self.formatter.new_line()
+                )
+                if func.desc.deprecation_notice
+                else ""
+            )
+            maybe_changelists = (
+                self.formatter.div(
+                    self.formatter.b("Changes"),
+                    ":",
+                    self.formatter.new_line(),
+                    self.formatter.ul(
+                        [
+                            f"{self.formatter.b(c.version)}: {c.desc}"
+                            for c in sorted(func.desc.changelist, key=lambda change: change.version, reverse=True)
+                        ]
+                    ),
+                    self.formatter.new_line()
+                )
+                if func.desc.changelist
+                else ""
+            )
             content = self.formatter.div(
                 self.formatter.div(self.formatter.inline_code(func.signature)),
                 self.formatter.div(func.desc.brief),
                 self.formatter.new_line(),
+                maybe_deprecated_notice,
+                maybe_changelists,
                 self.formatter.div(self.formatter.b("Note"), ": ", func.desc.details) if func.desc.details else "",
                 self.formatter.new_line(),
                 authors,

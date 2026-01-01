@@ -27,8 +27,10 @@ python3 -m arkdoc --help
 ## Syntax
 
 - `@brief <description>`: a single brief declaration is expected
-- `@param <name> <description>`: multiple `@param` declaration can be written
+- `@param <name> <description>`: multiple `@param` declarations can be written
 - `@details <description>`: a single detailed declaration is expected
+- `@deprecated <description>`: an optional deprecation notice
+- `@changed <version> <description>`: multiple `@changed` declarations can be written. Creates an optional change list to document when and how a function changed
 - `=begin` / code block / `=end`: a single code block (it can contain multiple lines) is expected
 - `@author <url>,<url>,...`: the url to the profiles of the authors must be separated by commas, spaces can be added
 - any line not starting with a `@<keyword>` will be ignored, unless it is enclosed in a `=begin`/`=end` block
