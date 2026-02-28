@@ -80,7 +80,7 @@ class Generator:
                     self.formatter.h4(self.formatter.plural("Parameter", len(func.desc.params))),
                     self.formatter.ul(
                         [
-                            f"{self.formatter.inline_code(p.name)}: {p.desc}"
+                            f"{self.formatter.inline_code(p.name)}: {p.desc}" if p.desc else self.formatter.inline_code(p.name)
                             for p in func.desc.params
                         ]
                     ),
