@@ -115,11 +115,18 @@ def from_txt(doc: Documentation) -> spec.Function:
 
 
 def documentation_to_specification(doc: Documentation) -> spec.Function:
-    if doc.source == Source.ArkScript:
-        return from_ark(doc)
-    elif doc.source == Source.Cpp:
-        return from_cpp(doc)
-    elif doc.source == Source.Txt:
-        return from_txt(doc)
-    else:
-        raise NotImplementedError
+    try:
+        if doc.source == Source.ArkScript:
+            return from_ark(doc)
+        elif doc.source == Source.Cpp:
+            return from_cpp(doc)
+        elif doc.source == Source.Txt:
+            return from_txt(doc)
+    except ValueError as e:
+        logger.error(f"While parsing file a {doc.source}, got an error")
+        try:
+            logger.error(str(doc))
+        except Exception:
+            logger.warn("Couldn't print the signature of the function")
+        raise e
+    raise NotImplementedError

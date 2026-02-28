@@ -39,8 +39,12 @@ class Generator:
 
         for p in parsers:
             functions = []
-            for doc in p.extract_documentation():
-                functions.append(documentation_to_specification(doc))
+            for i, doc in enumerate(p.extract_documentation()):
+                try:
+                    functions.append(documentation_to_specification(doc))
+                except Exception as e:
+                    logger.error(f"Error while parsing documentation block no {i + 1} inside {p.filename}")
+                    raise e
 
             base = os.path.splitext(os.path.basename(p.filename))[0]
             if base in registered:
