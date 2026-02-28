@@ -50,7 +50,12 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
 
     if "param" in data:
         for i, param in enumerate(data["param"]):
-            param_name, desc = param.split(" ", 1)
+            parts = param.split(" ", 1)
+            if len(parts) == 2:
+                param_name, desc = parts
+            else:
+                param_name = param
+                desc = ""
             data["param"][i] = spec.Param(param_name, desc)
     if "changed" in data:
         for i, changed in enumerate(data["changed"]):
