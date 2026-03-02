@@ -80,7 +80,8 @@ class Generator:
                     self.formatter.h4(self.formatter.plural("Parameter", len(func.desc.params))),
                     self.formatter.ul(
                         [
-                            f"{self.formatter.inline_code(p.name)}: {p.desc}" if p.desc else self.formatter.inline_code(p.name)
+                            f"{self.formatter.inline_code(p.name)}: {p.desc}" if p.desc else self.formatter.inline_code(
+                                p.name)
                             for p in func.desc.params
                         ]
                     ),
@@ -120,7 +121,9 @@ class Generator:
                 self.formatter.new_line(),
                 maybe_deprecated_notice,
                 maybe_changelists,
-                self.formatter.div(self.formatter.b("Note"), ": ", func.desc.details) if func.desc.details else "",
+                self.formatter.div(
+                    self.formatter.b("Note"), ": ",
+                    self.formatter.new_line().join(func.desc.details)) if func.desc.details else "",
                 self.formatter.new_line(),
                 authors,
                 self.formatter.new_line(),

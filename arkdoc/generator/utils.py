@@ -10,7 +10,7 @@ from .. import logger
 
 DEFAULT_KEYS = {
     "brief": "",
-    "details": "",
+    "details": [],
     "param": [],
     "author": "",
     "deprecated": "",
@@ -20,10 +20,22 @@ DEFAULT_KEYS = {
 
 def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
     in_code = False
+    in_details = False
     code = []
+    details = []
 
     for comment in doc.comments:
-        if not in_code:
+        if in_code:
+            if "=end" not in comment.value:
+                code.append(comment.value)
+            else:
+                in_code = False
+        elif in_details:
+            if "=details-end" not in comment.value:
+                details.append(comment.value)
+            else:
+                in_details = False
+        else:
             for key in data:
                 tag = f"@{key}"
 
@@ -38,15 +50,15 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
             else:
                 if "=begin" in comment.value:
                     in_code = True
-        else:
-            if "=end" not in comment.value:
-                code.append(comment.value)
-            else:
-                in_code = False
+                if "=details-begin" in comment.value:
+                    in_details = True
 
     if code:
         margin = code[0].index("(")
         code = [line[margin:] for line in code]
+    if details:
+        details = [line.removeprefix("#").strip() for line in details]
+        data["details"] += details
 
     if "param" in data:
         for i, param in enumerate(data["param"]):

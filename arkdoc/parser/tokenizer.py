@@ -70,7 +70,7 @@ def cpp_tokenize(code: str) -> Generator[list[Token], Any, None]:
       * @brief test
     */
     """
-    tok_regex = r"^ */\*\*\n( *\*( .*)\n)+"
+    tok_regex = r"^ */\*\*\n( *\*( *.*)\n)+"
     line_num = 1
     line_start = 0
 
