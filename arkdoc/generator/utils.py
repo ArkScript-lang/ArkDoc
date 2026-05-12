@@ -5,6 +5,7 @@ from typing import Tuple, Dict
 from copy import deepcopy
 
 from . import specification as spec
+from .specification import Requirement
 from ..parser import Documentation, Source
 from .. import logger
 
@@ -14,7 +15,8 @@ DEFAULT_KEYS = {
     "param": [],
     "author": "",
     "deprecated": "",
-    "changed": []
+    "changed": [],
+    "require": None
 }
 
 
@@ -73,8 +75,11 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
         for i, changed in enumerate(data["changed"]):
             version, desc = changed.split(" ", 1)
             data["changed"][i] = spec.Change(version, desc)
-    if "author" in data:
-        data["author"] = [el.strip() for el in data["author"].split(",") if data["author"]]
+    if "author" in data and data["author"]:
+        data["author"] = [el.strip() for el in data["author"].split(",")]
+    if "require" in data and data["require"]:
+        version, desc = data["require"].split(" ", 1)
+        data["require"] = Requirement(version, desc)
 
     return data, "\n".join(code)
 
@@ -87,7 +92,8 @@ def describe(data: Dict, code: str) -> spec.Description:
         code=code,
         authors=data["author"],
         deprecation_notice=data["deprecated"],
-        changelist=data["changed"]
+        changelist=data["changed"],
+        require=data["require"]
     )
 
 

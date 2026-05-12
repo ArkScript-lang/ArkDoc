@@ -115,10 +115,22 @@ class Generator:
                 if func.desc.changelist
                 else ""
             )
+            maybe_requirement = (
+                self.formatter.div(
+                    self.formatter.note(
+                        f"ArkScript {func.desc.require.version}",
+                        func.desc.require.desc
+                    ),
+                    self.formatter.new_line()
+                )
+                if func.desc.require
+                else ""
+            )
             content = self.formatter.div(
                 self.formatter.div(self.formatter.inline_code(func.signature)),
                 self.formatter.div(func.desc.brief),
                 self.formatter.new_line(),
+                maybe_requirement,
                 maybe_deprecated_notice,
                 maybe_changelists,
                 self.formatter.div(

@@ -50,6 +50,9 @@ class HTMLFormatter(Formatter):
     def div(self, *args: str) -> str:
         return "<div>" + "\n".join(args) + "</div>"
 
+    def note(self, *args: str) -> str:
+        return self.div(*args)
+
     def h1(self, name: str) -> str:
         return f"<h1>{name}</h1>"
 

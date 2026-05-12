@@ -32,6 +32,9 @@ class Formatter:
     def div(self, *args: str) -> str:
         raise NotImplementedError
 
+    def note(self, *args: str) -> str:
+        raise NotImplementedError
+
     def h1(self, name: str) -> str:
         raise NotImplementedError
 

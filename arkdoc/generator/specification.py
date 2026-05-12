@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import List, Optional
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -22,6 +22,12 @@ class Change:
 
 
 @dataclass
+class Requirement:
+    version: str
+    desc: str
+
+
+@dataclass
 class Description:
     brief: str
     details: str
@@ -30,6 +36,7 @@ class Description:
     authors: List[str]
     deprecation_notice: str
     changelist: List[Change]
+    require: Optional[Requirement]
 
 
 @dataclass
