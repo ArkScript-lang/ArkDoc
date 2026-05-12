@@ -36,8 +36,8 @@ class MarkdownFormatter(Formatter):
     def div(self, *args: str) -> str:
         return "".join(args) + "\n"
 
-    def note(self, *args: str) -> str:
-        return ("""{{< callout context="note" title="Note" icon="outline/info-circle" >}}""" +
+    def note(self, title, *args: str) -> str:
+        return (f"""{{{{< callout context="note" title="{title}" icon="outline/info-circle" >}}}}""" +
                 self.div(*args) +
                 "{{< /callout >}}")
 
