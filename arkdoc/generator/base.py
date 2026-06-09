@@ -44,6 +44,10 @@ class Generator:
                     functions.append(documentation_to_specification(doc))
                 except Exception as e:
                     logger.error(f"Error while parsing documentation block no {i + 1} inside {p.filename}")
+                    print()
+                    for comment in doc.comments:
+                        logger.error(comment.value)
+                    print()
                     raise e
 
             base = os.path.splitext(os.path.basename(p.filename))[0]

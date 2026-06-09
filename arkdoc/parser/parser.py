@@ -13,16 +13,25 @@ class Parser:
         self.filename = filename
         self.ast = None
         self.in_code = False
+        self.in_details = False
 
     def _is_doc_comment(self, token: Token) -> bool:
         if token.type == "COMMENT":
             if "=begin" in token.value:
                 self.in_code = True
                 return True
+            if "=details-begin" in token.value:
+                self.in_details = True
+                return True
             if "=end" not in token.value and self.in_code:
+                return True
+            if "=details-end" not in token.value and self.in_details:
                 return True
             if "=end" in token.value:
                 self.in_code = False
+                return True
+            if "=details-end" in token.value:
+                self.in_details = False
                 return True
 
             return re.match(r"^#+ *@\w+", token.value) is not None

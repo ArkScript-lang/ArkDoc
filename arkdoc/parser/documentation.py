@@ -55,7 +55,10 @@ class Documentation:
 
         if isinstance(top[2], list) and len(top[2][0]) >= 2:
             if kw.value not in self.macro_keywords:
-                args = transform(top[2][0][1][0])
+                if top[2][0][0].value == "fun":
+                    args = transform(top[2][0][1][0])
+                else:
+                    args = None
             else:
                 args = transform(top[2][0])
             return [kw.value, name.value, args]
