@@ -4,7 +4,7 @@ import re
 from typing import List
 
 from . import Documentation, Source
-from .tokenizer import cpp_tokenize, txt_tokenize, tree_from_tokens, tokenize, Token
+from .tokenizer import generic_tokenizer, CPP_COMMENT_REGEX, TXT_COMMENT_REGEX, tree_from_tokens, tokenize, Token
 from .. import logger
 
 
@@ -44,6 +44,9 @@ class Parser:
             if not isinstance(n, list):
                 if self._is_doc_comment(n):
                     comments = [n] if comments is None else comments + [n]
+                if n.type == "EMPTY_LINE" and comments is not None:
+                    yield Documentation(Source.ArkScript, comments, None)
+                    comments = None
             else:
                 if comments is None:
                     yield from self._doc_extractor(n)
@@ -77,10 +80,10 @@ class Parser:
             while tokens:
                 self.ast += tree_from_tokens(tokens)
         elif self.filename.endswith(".cpp"):
-            self.ast = list(cpp_tokenize(program))
+            self.ast = list(generic_tokenizer(CPP_COMMENT_REGEX, program))
             logger.debug(self.ast)
         elif self.filename.endswith(".txt"):
-            self.ast = list(txt_tokenize(program))
+            self.ast = list(generic_tokenizer(TXT_COMMENT_REGEX, program))
             logger.debug(self.ast)
         else:
             logger.error(f"Could not parse {self.filename}")

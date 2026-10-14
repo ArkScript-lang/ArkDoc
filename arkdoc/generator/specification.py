@@ -29,6 +29,7 @@ class Requirement:
 
 @dataclass
 class Description:
+    section: bool
     brief: str
     details: str
     params: List[Param]

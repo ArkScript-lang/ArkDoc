@@ -32,6 +32,9 @@ class Documentation:
     macro_keywords = ("$", "macro")
 
     def signature(self):
+        if self.target is None:
+            return [None, None, None]
+
         def transform(L):
             out = []
             for t in L:
@@ -67,6 +70,9 @@ class Documentation:
 
     @property
     def pretty_signature(self):
+        if self.target is None:
+            return ""
+
         kw, name, args = self.signature()
 
         sig = f"({kw} {name} "
@@ -80,6 +86,8 @@ class Documentation:
 
     @property
     def defined_at(self):
+        if self.target is None:
+            return self.comments[0].line if self.comments else 0
         return deep_flatten(self.target[:])[0].line
 
     def __str__(self):

@@ -16,7 +16,8 @@ DEFAULT_KEYS = {
     "author": "",
     "deprecated": "",
     "changed": [],
-    "require": None
+    "require": None,
+    "section": False
 }
 
 
@@ -49,6 +50,8 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
                             data[key].append(res)
                         else:
                             data[key] = res
+                    else:
+                        data[key] = True
             else:
                 if "=begin" in comment.value:
                     in_code = True
@@ -80,12 +83,24 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
     if "require" in data and data["require"]:
         version, desc = data["require"].split(" ", 1)
         data["require"] = Requirement(version, desc)
+    if "section" in data and data["section"]:
+        data["section"] = True
+        if data["param"] or code or data["author"]:
+            keys = list(filter(
+                lambda x: x != "",
+                [
+                    ("@param" if data["param"] else ""),
+                    ("=begin ... =end" if code else ""),
+                    ("@author" if data["author"] else ""),
+                ]))
+            logger.warn(f"Found incompatible keys ({keys}) for @section comment\n---\n{doc}\n---")
 
     return data, "\n".join(code)
 
 
 def describe(data: Dict, code: str) -> spec.Description:
     return spec.Description(
+        section=data.get("section", False),
         brief=data["brief"],
         details=data["details"],
         params=data["param"],
@@ -103,8 +118,8 @@ def from_ark(doc: Documentation) -> spec.Function:
 
     if args is not None and len(data["param"]) != len(args):
         logger.warn(
-            f"Function {name} was defined with {len(args)} argument(s), "
-            f"but {len(data['param'])} are documented"
+            f"Function {name} was defined with {len(args)} argument{'s' if len(args) != 1 else ''}, "
+            f"but {len(data['param'])} {'are' if len(data['param']) != 1 else 'is'} documented"
         )
 
     return spec.Function(
@@ -124,6 +139,7 @@ def from_cpp(doc: Documentation) -> spec.Function:
         f"Builtin ({data['name']} {' '.join(e.name for e in data['param'])})",
         describe(data, code),
     )
+
 
 def from_txt(doc: Documentation) -> spec.Function:
     parameters = {"name": ""}

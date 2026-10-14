@@ -6,6 +6,7 @@ from typing import List
 
 from . import specification as spec, Formatter
 from . import Generator
+from .specification import File
 from .. import logger
 from ..parser import Parser
 
@@ -112,7 +113,9 @@ class HTMLGenerator(Generator):
         (self.output_path_ver / "index.html").write_text(content)
         logger.info("Generated", self.output_path_ver / "index.html")
 
-    def generate_one(self, path: str, functions: List[spec.Function]):
+    def generate_one(self, file: spec.File):
+        path = file.path
+        functions = file.functions
         sections = self.generate_sections(functions, with_hr=False)
 
         table_of_content = self.templates["table_of_content.html"]

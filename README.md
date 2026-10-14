@@ -26,9 +26,11 @@ python3 -m arkdoc --help
 
 ## Syntax
 
+- `@section`: when present, indicate that a section block should be inserted. Not compatible with `@param`, `=begin` / `=end` (used for code examples) and `@author`
 - `@brief <description>`: a single brief declaration is expected
 - `@param <name> <description>`: multiple `@param` declarations can be written
 - `@details <description>`: a single detailed declaration is expected
+- `=details-begin` / details / `=details-end`: a block of details
 - `@require <version> <description>`: ArkScript version required to use a function
 - `@deprecated <description>`: an optional deprecation notice
 - `@changed <version> <description>`: multiple `@changed` declarations can be written. Creates an optional change list to document when and how a function changed

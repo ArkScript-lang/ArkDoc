@@ -64,98 +64,132 @@ class Generator:
     def generate_index(self):
         raise NotImplementedError
 
+    def __format_authors(self, func: spec.Function):
+        return (
+            self.formatter.div(
+                self.formatter.b(self.formatter.plural("Author", len(func.desc.authors))),
+                ": ",
+                ", ".join(
+                    [self.formatter.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
+                ),
+            )
+            if func.desc.authors
+            else ""
+        )
+
+    def __format_params(self, func: spec.Function):
+        return (
+            self.formatter.div(
+                self.formatter.h4(self.formatter.plural("Parameter", len(func.desc.params))),
+                self.formatter.ul(
+                    [
+                        f"{self.formatter.inline_code(p.name)}: {p.desc}" if p.desc else self.formatter.inline_code(
+                            p.name)
+                        for p in func.desc.params
+                    ]
+                ),
+            )
+            if func.desc.params
+            else ""
+        )
+
+    def __format_deprecation(self, func: spec.Function):
+        return (
+            self.formatter.div(
+                self.formatter.b("Deprecated"),
+                ": ",
+                func.desc.deprecation_notice,
+                self.formatter.new_line()
+            )
+            if func.desc.deprecation_notice
+            else ""
+        )
+
+    def __format_changes(self, func: spec.Function):
+        return (
+            self.formatter.div(
+                self.formatter.b("Changes"),
+                ":",
+                self.formatter.new_line(),
+                self.formatter.ul(
+                    [
+                        f"{self.formatter.b(c.version)}: {c.desc}"
+                        for c in sorted(func.desc.changelist, key=lambda change: change.version, reverse=True)
+                    ]
+                ),
+                self.formatter.new_line()
+            )
+            if func.desc.changelist
+            else ""
+        )
+
+    def __format_requirement(self, func: spec.Function):
+        return (
+            self.formatter.div(
+                self.formatter.note(
+                    f"ArkScript {func.desc.require.version}",
+                    func.desc.require.desc
+                ),
+                self.formatter.new_line()
+            )
+            if func.desc.require
+            else ""
+        )
+
+    def __format_doc(self, func: spec.Function):
+        authors = self.__format_authors(func)
+        parameters = self.__format_params(func)
+        maybe_deprecated_notice = self.__format_deprecation(func)
+        maybe_changelists = self.__format_changes(func)
+        maybe_requirement = self.__format_requirement(func)
+
+        content = self.formatter.div(
+            self.formatter.div(self.formatter.inline_code(func.signature)),
+            self.formatter.div(func.desc.brief),
+            self.formatter.new_line(),
+            maybe_requirement,
+            maybe_deprecated_notice,
+            maybe_changelists,
+            self.formatter.div(
+                self.formatter.b("Note"), ": ",
+                self.formatter.new_line().join(func.desc.details)) if func.desc.details else "",
+            self.formatter.new_line(),
+            authors,
+            self.formatter.new_line(),
+            parameters,
+        )
+        if func.desc.code:
+            content += self.formatter.div(self.formatter.h4("Example"), self.formatter.code(func.desc.code))
+
+        return content
+
     def generate_sections(self, functions: List[spec.Function], with_hr: bool = False):
         sections = ""
 
         for func in functions:
-            authors = (
-                self.formatter.div(
-                    self.formatter.b(self.formatter.plural("Author", len(func.desc.authors))),
-                    ": ",
-                    ", ".join(
-                        [self.formatter.a(f"@{a.split('/')[-1]}", a) for a in func.desc.authors]
-                    ),
-                )
-                if func.desc.authors
-                else ""
-            )
-            parameters = (
-                self.formatter.div(
-                    self.formatter.h4(self.formatter.plural("Parameter", len(func.desc.params))),
-                    self.formatter.ul(
-                        [
-                            f"{self.formatter.inline_code(p.name)}: {p.desc}" if p.desc else self.formatter.inline_code(
-                                p.name)
-                            for p in func.desc.params
-                        ]
-                    ),
-                )
-                if func.desc.params
-                else ""
-            )
-            maybe_deprecated_notice = (
-                self.formatter.div(
-                    self.formatter.b("Deprecated"),
-                    ": ",
-                    func.desc.deprecation_notice,
-                    self.formatter.new_line()
-                )
-                if func.desc.deprecation_notice
-                else ""
-            )
-            maybe_changelists = (
-                self.formatter.div(
-                    self.formatter.b("Changes"),
-                    ":",
+            if func.desc.section:
+                if sections:
+                    sections += self.formatter.hr()
+                sections += self.formatter.div(
+                    self.formatter.div(func.desc.brief),
                     self.formatter.new_line(),
-                    self.formatter.ul(
-                        [
-                            f"{self.formatter.b(c.version)}: {c.desc}"
-                            for c in sorted(func.desc.changelist, key=lambda change: change.version, reverse=True)
-                        ]
-                    ),
-                    self.formatter.new_line()
+                    self.formatter.div(
+                        self.formatter.new_line().join(func.desc.details) if func.desc.details else ""),
+                    self.formatter.new_line(),
+                    self.__format_deprecation(func),
+                    self.__format_requirement(func),
+                    self.__format_changes(func)
                 )
-                if func.desc.changelist
-                else ""
-            )
-            maybe_requirement = (
-                self.formatter.div(
-                    self.formatter.note(
-                        f"ArkScript {func.desc.require.version}",
-                        func.desc.require.desc
-                    ),
-                    self.formatter.new_line()
+            else:
+                sections += self.formatter.section(
+                    func.name,
+                    (self.formatter.hr() if with_hr else "") + self.__format_doc(func),
+                    anchor=self.formatter.anchorize(func.name)
                 )
-                if func.desc.require
-                else ""
-            )
-            content = self.formatter.div(
-                self.formatter.div(self.formatter.inline_code(func.signature)),
-                self.formatter.div(func.desc.brief),
-                self.formatter.new_line(),
-                maybe_requirement,
-                maybe_deprecated_notice,
-                maybe_changelists,
-                self.formatter.div(
-                    self.formatter.b("Note"), ": ",
-                    self.formatter.new_line().join(func.desc.details)) if func.desc.details else "",
-                self.formatter.new_line(),
-                authors,
-                self.formatter.new_line(),
-                parameters,
-            )
-            if func.desc.code:
-                content += self.formatter.div(self.formatter.h4("Example"), self.formatter.code(func.desc.code))
-            sections += self.formatter.section(
-                func.name,
-                (self.formatter.hr() if with_hr else "") + content,
-                anchor=self.formatter.anchorize(func.name)
-            )
 
         return sections
 
-    def generate_one(self, path: str, functions: List[spec.Function]):
+    def generate_one(self, file: spec.File):
         raise NotImplementedError
 
     def __call__(self):
@@ -171,5 +205,5 @@ class Generator:
             logger.info(
                 f"Generating {file.path} documentation... found {len(file.functions)} functions"
             )
-
-            self.generate_one(file.path, file.functions)
+            self.generate_one(file)
+        return None

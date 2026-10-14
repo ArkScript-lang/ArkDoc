@@ -86,7 +86,9 @@ class MDGenerator(Generator):
         self.decl_file.touch()
         logger.info("Created", self.output_path_ver / "_decl.txt")
 
-    def generate_one(self, path: str, functions: List[spec.Function]):
+    def generate_one(self, file: spec.File):
+        path = file.path
+        functions = file.functions
         sections = self.generate_sections(functions, with_hr=True)
 
         template = self.templates["page.md"]
