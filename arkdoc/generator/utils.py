@@ -50,7 +50,7 @@ def extractor(data: Dict, doc: Documentation) -> Tuple[Dict, str]:
                             data[key].append(res)
                         else:
                             data[key] = res
-                    else:
+                    elif not res and isinstance(data[key], bool):
                         data[key] = True
             else:
                 if "=begin" in comment.value:
