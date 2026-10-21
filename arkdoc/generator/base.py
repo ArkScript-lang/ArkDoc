@@ -136,12 +136,20 @@ class Generator:
             else ""
         )
 
+    def __format_details(self, func: spec.Function):
+        if not func.desc.details:
+            return ""
+        if isinstance(func.desc.details, list):
+            return self.formatter.new_line().join(func.desc.details)
+        return func.desc.details
+
     def __format_doc(self, func: spec.Function):
         authors = self.__format_authors(func)
         parameters = self.__format_params(func)
         maybe_deprecated_notice = self.__format_deprecation(func)
         maybe_changelists = self.__format_changes(func)
         maybe_requirement = self.__format_requirement(func)
+        details = self.__format_details(func)
 
         content = self.formatter.div(
             self.formatter.div(self.formatter.inline_code(func.signature)),
@@ -150,9 +158,7 @@ class Generator:
             maybe_requirement,
             maybe_deprecated_notice,
             maybe_changelists,
-            self.formatter.div(
-                self.formatter.b("Note"), ": ",
-                self.formatter.new_line().join(func.desc.details)) if func.desc.details else "",
+            self.formatter.div(self.formatter.b("Note"), ": ", details) if details else "",
             self.formatter.new_line(),
             authors,
             self.formatter.new_line(),
@@ -173,8 +179,7 @@ class Generator:
                 sections += self.formatter.div(
                     self.formatter.div(func.desc.brief),
                     self.formatter.new_line(),
-                    self.formatter.div(
-                        self.formatter.new_line().join(func.desc.details) if func.desc.details else ""),
+                    self.formatter.div(self.__format_details(func)),
                     self.formatter.new_line(),
                     self.__format_deprecation(func),
                     self.__format_requirement(func),
